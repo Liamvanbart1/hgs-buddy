@@ -376,22 +376,6 @@ export function CategoryPage({
                             BEST SELLER
                           </div>
                         )}
-                        {/* Comparison button */}
-                        {onToggleComparison && (
-                          <button 
-                            className={`group/compare absolute bottom-3 left-3 p-2.5 rounded-full border-2 transition-all ${
-                                comparisonSelection.includes(product.id)
-                                  ? 'bg-white border-[#86a201] text-[#86a201]'
-                                  : 'bg-[#86a201] border-transparent hover:bg-white hover:border-[#86a201] text-white hover:text-[#86a201]'
-                            }`}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              onToggleComparison(product.id);
-                            }}
-                          >
-                            <Scale className="w-5 h-5 group-hover/compare:text-[#86a201]" />
-                          </button>
-                        )}
                         {/* Add to cart button */}
                         <button 
                           className="absolute bottom-3 right-3 bg-[#ff6b35] hover:bg-[#ff5520] text-white p-2.5 rounded-lg transition-colors"
@@ -420,6 +404,43 @@ export function CategoryPage({
                             </svg>
                             Op voorraad
                           </div>
+                        )}
+                        {/* Vergelijken checkbox - HGS Buddy stijl */}
+                        {onToggleComparison && (
+                          <label
+                            className="mt-3 pt-3 border-t border-gray-100 flex items-center gap-2.5 cursor-pointer select-none group/cmp"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <input
+                              type="checkbox"
+                              checked={comparisonSelection.includes(product.id)}
+                              onChange={(e) => {
+                                e.stopPropagation();
+                                onToggleComparison(product.id);
+                              }}
+                              className="sr-only"
+                            />
+                            <span className={`w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0 transition-colors ${
+                              comparisonSelection.includes(product.id)
+                                ? 'bg-[#86a201] border-[#86a201]'
+                                : 'bg-white border-gray-300 group-hover/cmp:border-[#86a201]'
+                            }`}>
+                              {comparisonSelection.includes(product.id) && (
+                                <svg className="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                </svg>
+                              )}
+                            </span>
+                            <span className="flex items-center gap-1.5 text-xs font-semibold text-gray-900">
+                              Vergelijken met
+                              <span className="flex items-center gap-1">
+                                <span className="text-[#86a201]">HGS Buddy</span>
+                                <span className="w-3.5 h-3.5 text-[#86a201] flex-shrink-0">
+                                  <Group />
+                                </span>
+                              </span>
+                            </span>
+                          </label>
                         )}
                       </div>
                     </div>
@@ -468,7 +489,6 @@ export function CategoryPage({
                     onBackToRecommendations={handleBackToProducts}
                     showBackButton={false}
                     onRecommendationGenerated={(recommendation) => {
-                      // Send recommendation to Digital Assistant
                       setAssistantRecommendation(recommendation);
                     }}
                   />
@@ -584,12 +604,12 @@ export function CategoryPage({
           >
             <button
               onClick={handleLocalStartComparison}
-              className="bg-[#86a201] hover:bg-[#6d8301] text-white px-8 py-4 rounded-full shadow-2xl flex items-center gap-3 transition-colors"
+              className="bg-[#86a201] hover:bg-white hover:text-[#86a201] border-2 border-transparent hover:border-[#86a201] text-white px-8 py-4 rounded-[50px] shadow-2xl flex items-center gap-3 transition-colors"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
               </svg>
-              <span className="text-lg font-semibold">Vergelijk {comparisonSelection.length} producten</span>
+              <span className="text-lg font-semibold">Vergelijk {comparisonSelection.length} producten met HGS Buddy</span>
             </button>
           </motion.div>
         )}

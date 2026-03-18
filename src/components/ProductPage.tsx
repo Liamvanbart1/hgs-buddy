@@ -7,6 +7,7 @@ import { WebshopHeader } from './WebshopHeader';
 import { ProductCard } from './ProductCard';
 import { DigitalAssistant } from './DigitalAssistant';
 import { TextSelectionPopup } from './TextSelectionPopup';
+import { SpecTooltip } from './SpecTooltip';
 import { motion, AnimatePresence } from 'motion/react';
 import { ChevronRight, Star, ShoppingCart, FileText, ChevronLeft } from 'lucide-react';
 import Group from '../imports/Group';
@@ -517,7 +518,12 @@ export function ProductPage({ onNavigateHome, onNavigateCategory }: ProductPageP
                         <tbody>
                           {Object.entries(specs).map(([key, value], idx) => (
                             <tr key={key} className={idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
-                              <td className="py-3 px-4 text-sm font-medium text-gray-700 w-1/3">{key}</td>
+                              <td className="py-3 px-4 text-sm font-medium text-gray-700 w-1/3">
+                                <SpecTooltip term={key} onAskAssistant={(q) => {
+                                  setIsAssistantOpen(true);
+                                  setAssistantQuery(q);
+                                }} />
+                              </td>
                               <td className="py-3 px-4 text-sm text-gray-900">{value}</td>
                             </tr>
                           ))}

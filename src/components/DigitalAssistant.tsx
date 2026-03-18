@@ -301,11 +301,67 @@ export function DigitalAssistant({
         }
       > = {
         vermogen: {
-          term: "Vermogen",
+          term: "Vermogen — 2,8 kW",
           explanation:
-            "Vermogen wordt uitgedrukt in kW (kilowatt) en geeft aan hoeveel energie het apparaat verbruikt en kan leveren. Voor horecaapparatuur is dit cruciaal omdat het de verwarmingscapaciteit en snelheid bepaalt.",
+            "Vermogen wordt uitgedrukt in kW (kilowatt) en geeft aan hoeveel energie het apparaat verbruikt én kan leveren. De Bartscher heteluchtoven AT90 heeft een vermogen van 2,8 kW — bewust laag zodat het apparaat op een gewoon stopcontact (230V) werkt, zonder krachtstroom.",
           practical:
-            "Krachtstroom vs. Netstroom:\n\n• Netstroom (230V): Tot ca. 3,5 kW - geschikt voor kleinere apparaten zoals magnetrons, koffiemachines\n• Krachtstroom (400V 3N): Vanaf 3,5 kW - nodig voor professionele apparaten zoals combisteamers, grote ovens en friteuses\n\nPraktisch voorbeeld:\nEen combisteamer met 18 kW vermogen heeft krachtstroom nodig en kan daardoor:\n• Sneller de gewenste temperatuur bereiken\n• Meer producties per dag draaien\n• Hogere capaciteit aan zonder kwaliteitsverlies\n\nLet op: Controleer altijd of uw keuken beschikt over de juiste aansluiting!",
+            "✅ Wat betekent 2,8 kW in de praktijk?\n\n• Verwarmingstijd: 50-300°C bereikt u in ca. 10-15 minuten\n• Energieverbruik per uur: 2,8 kWh\n• Kosten per uur (bij €0,30/kWh): ±€0,84\n• Dagkosten (4 uur gebruik): ±€3,36\n• Maandkosten (22 werkdagen): ±€74,-\n\n💡 Netstroom vs. Krachtstroom:\n• Deze oven gebruikt 230V (normaal stopcontact) — geen krachtstroom nodig!\n• Apparaten boven ±3,5 kW vereisen 400V krachtstroom (extra installatie €500-2000)\n\n⚡ Geschikt voor:\nKleine horecazaken, lunchrooms, cafetaria's en keukens zonder krachtstroom.",
+        },
+        spanning: {
+          term: "Spanning — 230V",
+          explanation:
+            "Spanning (uitgedrukt in Volt) geeft aan op welk elektriciteitsnet het apparaat moet worden aangesloten. De Bartscher AT90 werkt op 230V — de standaard netspanning in Nederland en België. Dit past op een gewoon stopcontact, zonder speciale installatie.",
+          practical:
+            "🔌 Wat betekent 230V voor u?\n\n• Geen speciale elektra-installatie nodig\n• Sluit direct aan op een standaard stopcontact (max. 16A groep)\n• Geen extra kosten voor krachtstroom-installatie\n• Ideaal als uw keuken geen krachtstroom heeft\n\n📊 Spanningsvergelijking horeca:\n\n• 230V (1-fase) — deze oven ✅\n  → Standaard stopcontact\n  → Max. ±3,5 kW vermogen\n  → Geen extra installatie\n\n• 400V 3N (krachtstroom / 3-fase)\n  → Nodig voor combisteamers, grote frituurpannen\n  → Vanaf 3,5 kW vermogen\n  → Installatie kost €500-2000 extra\n\n💡 Praktische tip:\nAls u later overstapt op een grotere oven (bijv. combisteamer), zorg dan nu al voor krachtstroom in uw keuken. Dat bespaart later verbouwingskosten!",
+        },
+        temperatuur: {
+          term: "Temperatuurbereik — 50-300°C",
+          explanation:
+            "Het temperatuurbereik geeft aan tussen welke temperaturen het apparaat kan werken. De Bartscher AT90 werkt van 50°C tot 300°C — een breed bereik dat geschikt is voor vrijwel alle horeca-toepassingen.",
+          practical:
+            "🌡️ Waarvoor gebruikt u welke temperatuur?\n\n• 50-80°C: Warmhouden van gerechten, rijzen van brooddeeg\n• 100-150°C: Zacht bakken, cakes, vlaaien\n• 160-180°C: Standaard bakken, broodjes, croissants\n• 180-220°C: Vlees, gevogelte, gegrilde groenten\n• 220-250°C: Pizza, krokante producten, bladerdeeg\n• 260-300°C: Hoge hitte bakken, gratin, bruinen\n\n✅ Voordeel van hetelucht:\nDoor de ventilator circuleert de warme lucht gelijkmatig — dit zorgt voor 15-20% kortere baktijden en gelijkmatige resultaten op álle baklagen tegelijk.",
+        },
+        "bak niveau": {
+          term: "Bak niveau — 5",
+          explanation:
+            "Het aantal bakniveaus geeft aan hoeveel bakplaten of roosters tegelijk in de oven passen. De Bartscher AT90 heeft 5 bakniveaus voor maximaal 5 GN 1/1 bakplaten tegelijk.",
+          practical:
+            "📦 Capaciteit in de praktijk:\n\n• 5 bakniveaus × GN 1/1 (530x325mm) = 5 volledige bakplaten\n• Per bakplaat: ±12-16 broodjes, of 1 pizza, of 4-6 stukken vlees\n• Totale capaciteit per cyclus: ±60-80 producten\n\n⏱️ Rekenvoorbeeld:\n• Cyclus van 15 minuten bij 180°C\n• 4 cycli per uur = 240-320 broodjes/uur\n\n💡 Tip: Schaf extra bakplaten aan zodat u kunt laden terwijl de vorige batch afkoelt.",
+        },
+        koelsysteem: {
+          term: "Koelsysteem — Ventilator",
+          explanation:
+            "Het koelsysteem beschermt de buitenwand en elektronica van de oven tegen oververhitting. De Bartscher AT90 gebruikt een ventilator als koelsysteem.",
+          practical:
+            "🌀 Wat doet de koelventilator?\n\n• Koelt de buitenwand af tijdens en na gebruik\n• Beschermt de elektronica en bediening\n• Zorgt dat de oven veilig te hanteren is\n• Vermindert warmte-uitstraling naar de keukenruimte\n• Verlengt de levensduur van componenten\n\n⚠️ Belangrijk: Houd minimaal 10 cm ruimte vrij rondom de oven voor optimale luchtcirculatie. Nooit afdekken tijdens gebruik!",
+        },
+        materiaal: {
+          term: "Materiaal buitenzijde — RVS",
+          explanation:
+            "RVS staat voor Roestvrij Staal (ook wel inox of stainless steel). Dit is het standaardmateriaal voor professionele horecaapparatuur vanwege de hygiënische en duurzame eigenschappen.",
+          practical:
+            "✨ Waarom RVS in de horeca?\n\n• Hygiënisch: Gladde oppervlakte, geen bacteriën in poriën\n• Corrosiebestendig: Bestand tegen vocht en reinigingsmiddelen\n• Duurzaam: Bestand tegen intensief dagelijks gebruik\n• Makkelijk te reinigen: Met RVS-reiniger snel schoon\n• Voldoet aan HACCP-normen voor voedselveiligheid\n\n🧹 Onderhoudstips:\n• Gebruik RVS-reiniger voor een glanzend resultaat\n• Poets altijd in de richting van het draadpatroon\n• Vermijd staalwol of schurende doekjes (beschadigt oppervlak)",
+        },
+        stoomfunctie: {
+          term: "Stoomfunctie — Nee",
+          explanation:
+            "Een stoomfunctie injecteert waterdamp in de oven. De Bartscher AT90 heeft géén stoomfunctie. Dit is een bewuste keuze voor een compacte en betaalbare heteluchtoven.",
+          practical:
+            "💧 Heeft u een stoomfunctie nodig?\n\nZonder stoom (deze oven) — geschikt voor:\n✅ Broodjes, croissants, pastei, pizza\n✅ Vlees, gevogelte, ovenschotels\n✅ Cake, gebak en patisserie\n\nMét stoom (combisteamer) — geschikt voor:\n🔵 Ambachtelijk brood met knapperige korst\n🔵 Sous-vide en gestoomde gerechten\n🔵 Professionele combi-bereidingen\n\n💡 Wilt u wel een stoomfunctie? Dan zijn dit alternatieven:\n→ Rational iCombi Pro (vanaf €12.499,-)\n→ Convotherm Combisteamer (vanaf €11.299,-)\n\nZal ik deze vergelijken?",
+        },
+        timer: {
+          term: "Timer — Digitaal",
+          explanation:
+            "De digitale timer stelt u in staat om een exacte baktijd in te stellen. De oven geeft een signaal als de tijd om is.",
+          practical:
+            "⏱️ Voordelen digitale timer:\n\n• Exacte tijdinstelling per minuut\n• Akoestisch signaal bij verlopen tijd\n• Voorkomt verbrand product bij drukke dienst\n• Minder toezicht nodig — personeel kan andere taken doen\n• Reproduceerbare resultaten (zelfde tijd = zelfde kwaliteit)\n\n💡 Digitaal vs. analoog:\n• Analoog: Mechanische knop, minder nauwkeurig, slijt sneller\n• Digitaal: Display, nauwkeurig, langere levensduur\n\nPro tip: Maak een receptenlijst met optimale tijden per product voor consistente kwaliteit.",
+        },
+        thermostaat: {
+          term: "Thermostaat — Digitaal",
+          explanation:
+            "De digitale thermostaat regelt nauwkeurig de temperatuur in de ovenruimte. Een digitale thermostaat is nauwkeuriger en stabieler dan een analoge.",
+          practical:
+            "🌡️ Voordelen digitale thermostaat:\n\n• Nauwkeurigheid: ±5°C (vs. ±15-20°C bij analoog)\n• Constante temperatuur door automatische bijsturing\n• Duidelijke digitale aflezing op display\n• Snellere opwarmtijd door actieve temperatuurbewaking\n\n📊 Temperatuurstabiliteit:\n• Analoog: Schommeling ±15-20°C rondom instelling\n• Digitaal: Schommeling ±3-5°C = consistenter bakresultaat\n\n✅ Belangrijk voor:\n• Precisie bij patisserie en banketbakkerij\n• HACCP-documentatie (kerntemperatuur bereikt)\n• Reproduceerbare resultaten bij groot volume",
         },
         capaciteit: {
           term: "Capaciteit",
@@ -344,13 +400,19 @@ export function DigitalAssistant({
         },
       };
 
-      // Find matching explanation (case insensitive)
+      // Find matching explanation (case insensitive, supports multi-word keys)
       const explanation = Object.entries(
         technicalExplanations,
-      ).find(
-        ([key]) =>
-          lowerTerm.includes(key) || key.includes(lowerTerm),
-      )?.[1];
+      ).find(([key]) => {
+        const lowerKey = key.toLowerCase();
+        // Exact match, substring match, or first word of key matches
+        return (
+          lowerTerm === lowerKey ||
+          lowerTerm.includes(lowerKey) ||
+          lowerKey.includes(lowerTerm) ||
+          lowerKey.split(" ").some((word) => word.length > 3 && lowerTerm.includes(word))
+        );
+      })?.[1];
 
       if (explanation) {
         return [
