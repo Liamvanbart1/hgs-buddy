@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HGS BUDDY</title>
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <style>
+      #vf-toggle-btn {
+        position: fixed;
+        bottom: 24px;
+        left: 100px;
+        z-index: 99999;
+        padding: 6px 12px;
+        background: #fff;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+      }
+    </style>
+    <button
+      id="vf-toggle-btn"
+      onclick="
+        var el = document.getElementById('voiceflow-chat');
+        if (el) {
+          el.style.display = el.style.display === 'none' ? '' : 'none';
+          this.textContent =
+            el.style.display === 'none' ? 'Show chat' : 'Hide chat';
+        }
+      "
+    >
+      Hide chat
+    </button>
+
+    <script type="text/javascript">
+      (function (d, t) {
+        var v = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+        v.onload = function () {
+          window.voiceflow.chat.load({
+            verify: { projectID: "696617803e75273cda08fcb8" },
+            url: "https://general-runtime.voiceflow.com",
+            versionID: "production",
+            voice: {
+              url: "https://runtime-api.voiceflow.com",
+            },
+          });
+        };
+        v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs";
+        v.type = "text/javascript";
+        s.parentNode.insertBefore(v, s);
+      })(document, "script");
+    </script>
+  </body>
+</html>
