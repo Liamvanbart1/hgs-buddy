@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import Group from '../imports/Group';
+import { hasExplanation } from './specExplanationKeys';
 
 interface SpecTooltipProps {
   term: string;
@@ -9,6 +10,7 @@ interface SpecTooltipProps {
 export function SpecTooltip({ term, onAskAssistant }: SpecTooltipProps) {
   const [visible, setVisible] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const hasInfo = hasExplanation(term);
 
   const handleMouseEnter = () => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
@@ -28,11 +30,16 @@ export function SpecTooltip({ term, onAskAssistant }: SpecTooltipProps) {
   return (
     <span
       className="relative inline-flex items-center gap-1 cursor-pointer group/spec"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onMouseEnter={hasInfo ? handleMouseEnter : undefined}
+      onMouseLeave={hasInfo ? handleMouseLeave : undefined}
     >
       {/* Term tekst met subtiele stippellijn */}
-      <span className="border-b border-dashed border-gray-400 group-hover/spec:border-[#86a201] group-hover/spec:text-[#86a201] transition-colors">
+      <span
+        className={hasInfo
+          ? "border-b-2 border-dashed border-gray-400 group-hover/spec:border-[#86a201] group-hover/spec:text-[#86a201] group-hover/spec:bg-[#86a201]/10 group-hover/spec:px-1 group-hover/spec:rounded transition-all duration-200 cursor-pointer"
+          : ""}
+        onClick={hasInfo ? handleClick : undefined}
+      >
         {term}
       </span>
 
