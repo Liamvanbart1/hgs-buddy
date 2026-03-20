@@ -48,6 +48,13 @@ interface ComparisonFlowState {
   searchQuery: string;
 }
 
+interface AlternatiefFlowState {
+  isActive: boolean;
+  currentStep: number;
+  category: string;
+  reden: string;
+}
+
 interface DigitalAssistantProps {
   onClose?: () => void;
   onOpen?: () => void;
@@ -138,10 +145,11 @@ export function DigitalAssistant({
       sender: "assistant",
       type: "text",
       suggestions: [
-        "Ik ben op zoek naar een oven",
-        "Is dit product geschikt voor mijn situatie",
+        "Ik zoek een specifiek product",
         "Ik wil producten vergelijken",
-        "Leg de specificaties uit",
+        "Ik heb advies nodig",
+        "Ik zoek alternatieven",
+        "Ik heb uitleg nodig",
       ],
     },
   ]);
@@ -163,6 +171,14 @@ export function DigitalAssistant({
       currentStep: 1,
       products: [],
       searchQuery: "",
+    });
+  const [uitlegFlowActive, setUitlegFlowActive] = useState(false);
+  const [alternatievenFlowState, setAlternatievenFlowState] =
+    useState<AlternatiefFlowState>({
+      isActive: false,
+      currentStep: 1,
+      category: "",
+      reden: "",
     });
 
   const scrollToBottom = () => {
@@ -301,11 +317,67 @@ export function DigitalAssistant({
         }
       > = {
         vermogen: {
-          term: "Vermogen",
+          term: "Vermogen — 2,8 kW",
           explanation:
-            "Vermogen wordt uitgedrukt in kW (kilowatt) en geeft aan hoeveel energie het apparaat verbruikt en kan leveren. Voor horecaapparatuur is dit cruciaal omdat het de verwarmingscapaciteit en snelheid bepaalt.",
+            "Vermogen wordt uitgedrukt in kW (kilowatt) en geeft aan hoeveel energie het apparaat verbruikt én kan leveren. De Bartscher heteluchtoven AT90 heeft een vermogen van 2,8 kW — bewust laag zodat het apparaat op een gewoon stopcontact (230V) werkt, zonder krachtstroom.",
           practical:
-            "Krachtstroom vs. Netstroom:\n\n• Netstroom (230V): Tot ca. 3,5 kW - geschikt voor kleinere apparaten zoals magnetrons, koffiemachines\n• Krachtstroom (400V 3N): Vanaf 3,5 kW - nodig voor professionele apparaten zoals combisteamers, grote ovens en friteuses\n\nPraktisch voorbeeld:\nEen combisteamer met 18 kW vermogen heeft krachtstroom nodig en kan daardoor:\n• Sneller de gewenste temperatuur bereiken\n• Meer producties per dag draaien\n• Hogere capaciteit aan zonder kwaliteitsverlies\n\nLet op: Controleer altijd of uw keuken beschikt over de juiste aansluiting!",
+            "✅ Wat betekent 2,8 kW in de praktijk?\n\n• Verwarmingstijd: 50-300°C bereikt u in ca. 10-15 minuten\n• Energieverbruik per uur: 2,8 kWh\n• Kosten per uur (bij €0,30/kWh): ±€0,84\n• Dagkosten (4 uur gebruik): ±€3,36\n• Maandkosten (22 werkdagen): ±€74,-\n\n💡 Netstroom vs. Krachtstroom:\n• Deze oven gebruikt 230V (normaal stopcontact) — geen krachtstroom nodig!\n• Apparaten boven ±3,5 kW vereisen 400V krachtstroom (extra installatie €500-2000)\n\n⚡ Geschikt voor:\nKleine horecazaken, lunchrooms, cafetaria's en keukens zonder krachtstroom.",
+        },
+        spanning: {
+          term: "Spanning — 230V",
+          explanation:
+            "Spanning (uitgedrukt in Volt) geeft aan op welk elektriciteitsnet het apparaat moet worden aangesloten. De Bartscher AT90 werkt op 230V — de standaard netspanning in Nederland en België. Dit past op een gewoon stopcontact, zonder speciale installatie.",
+          practical:
+            "🔌 Wat betekent 230V voor u?\n\n• Geen speciale elektra-installatie nodig\n• Sluit direct aan op een standaard stopcontact (max. 16A groep)\n• Geen extra kosten voor krachtstroom-installatie\n• Ideaal als uw keuken geen krachtstroom heeft\n\n📊 Spanningsvergelijking horeca:\n\n• 230V (1-fase) — deze oven ✅\n  → Standaard stopcontact\n  → Max. ±3,5 kW vermogen\n  → Geen extra installatie\n\n• 400V 3N (krachtstroom / 3-fase)\n  → Nodig voor combisteamers, grote frituurpannen\n  → Vanaf 3,5 kW vermogen\n  → Installatie kost €500-2000 extra\n\n💡 Praktische tip:\nAls u later overstapt op een grotere oven (bijv. combisteamer), zorg dan nu al voor krachtstroom in uw keuken. Dat bespaart later verbouwingskosten!",
+        },
+        temperatuur: {
+          term: "Temperatuurbereik — 50-300°C",
+          explanation:
+            "Het temperatuurbereik geeft aan tussen welke temperaturen het apparaat kan werken. De Bartscher AT90 werkt van 50°C tot 300°C — een breed bereik dat geschikt is voor vrijwel alle horeca-toepassingen.",
+          practical:
+            "🌡️ Waarvoor gebruikt u welke temperatuur?\n\n• 50-80°C: Warmhouden van gerechten, rijzen van brooddeeg\n• 100-150°C: Zacht bakken, cakes, vlaaien\n• 160-180°C: Standaard bakken, broodjes, croissants\n• 180-220°C: Vlees, gevogelte, gegrilde groenten\n• 220-250°C: Pizza, krokante producten, bladerdeeg\n• 260-300°C: Hoge hitte bakken, gratin, bruinen\n\n✅ Voordeel van hetelucht:\nDoor de ventilator circuleert de warme lucht gelijkmatig — dit zorgt voor 15-20% kortere baktijden en gelijkmatige resultaten op álle baklagen tegelijk.",
+        },
+        "bak niveau": {
+          term: "Bak niveau — 5",
+          explanation:
+            "Het aantal bakniveaus geeft aan hoeveel bakplaten of roosters tegelijk in de oven passen. De Bartscher AT90 heeft 5 bakniveaus voor maximaal 5 GN 1/1 bakplaten tegelijk.",
+          practical:
+            "📦 Capaciteit in de praktijk:\n\n• 5 bakniveaus × GN 1/1 (530x325mm) = 5 volledige bakplaten\n• Per bakplaat: ±12-16 broodjes, of 1 pizza, of 4-6 stukken vlees\n• Totale capaciteit per cyclus: ±60-80 producten\n\n⏱️ Rekenvoorbeeld:\n• Cyclus van 15 minuten bij 180°C\n• 4 cycli per uur = 240-320 broodjes/uur\n\n💡 Tip: Schaf extra bakplaten aan zodat u kunt laden terwijl de vorige batch afkoelt.",
+        },
+        koelsysteem: {
+          term: "Koelsysteem — Ventilator",
+          explanation:
+            "Het koelsysteem beschermt de buitenwand en elektronica van de oven tegen oververhitting. De Bartscher AT90 gebruikt een ventilator als koelsysteem.",
+          practical:
+            "🌀 Wat doet de koelventilator?\n\n• Koelt de buitenwand af tijdens en na gebruik\n• Beschermt de elektronica en bediening\n• Zorgt dat de oven veilig te hanteren is\n• Vermindert warmte-uitstraling naar de keukenruimte\n• Verlengt de levensduur van componenten\n\n⚠️ Belangrijk: Houd minimaal 10 cm ruimte vrij rondom de oven voor optimale luchtcirculatie. Nooit afdekken tijdens gebruik!",
+        },
+        materiaal: {
+          term: "Materiaal buitenzijde — RVS",
+          explanation:
+            "RVS staat voor Roestvrij Staal (ook wel inox of stainless steel). Dit is het standaardmateriaal voor professionele horecaapparatuur vanwege de hygiënische en duurzame eigenschappen.",
+          practical:
+            "✨ Waarom RVS in de horeca?\n\n• Hygiënisch: Gladde oppervlakte, geen bacteriën in poriën\n• Corrosiebestendig: Bestand tegen vocht en reinigingsmiddelen\n• Duurzaam: Bestand tegen intensief dagelijks gebruik\n• Makkelijk te reinigen: Met RVS-reiniger snel schoon\n• Voldoet aan HACCP-normen voor voedselveiligheid\n\n🧹 Onderhoudstips:\n• Gebruik RVS-reiniger voor een glanzend resultaat\n• Poets altijd in de richting van het draadpatroon\n• Vermijd staalwol of schurende doekjes (beschadigt oppervlak)",
+        },
+        stoomfunctie: {
+          term: "Stoomfunctie — Nee",
+          explanation:
+            "Een stoomfunctie injecteert waterdamp in de oven. De Bartscher AT90 heeft géén stoomfunctie. Dit is een bewuste keuze voor een compacte en betaalbare heteluchtoven.",
+          practical:
+            "💧 Heeft u een stoomfunctie nodig?\n\nZonder stoom (deze oven) — geschikt voor:\n✅ Broodjes, croissants, pastei, pizza\n✅ Vlees, gevogelte, ovenschotels\n✅ Cake, gebak en patisserie\n\nMét stoom (combisteamer) — geschikt voor:\n🔵 Ambachtelijk brood met knapperige korst\n🔵 Sous-vide en gestoomde gerechten\n🔵 Professionele combi-bereidingen\n\n💡 Wilt u wel een stoomfunctie? Dan zijn dit alternatieven:\n→ Rational iCombi Pro (vanaf €12.499,-)\n→ Convotherm Combisteamer (vanaf €11.299,-)\n\nZal ik deze vergelijken?",
+        },
+        timer: {
+          term: "Timer — Digitaal",
+          explanation:
+            "De digitale timer stelt u in staat om een exacte baktijd in te stellen. De oven geeft een signaal als de tijd om is.",
+          practical:
+            "⏱️ Voordelen digitale timer:\n\n• Exacte tijdinstelling per minuut\n• Akoestisch signaal bij verlopen tijd\n• Voorkomt verbrand product bij drukke dienst\n• Minder toezicht nodig — personeel kan andere taken doen\n• Reproduceerbare resultaten (zelfde tijd = zelfde kwaliteit)\n\n💡 Digitaal vs. analoog:\n• Analoog: Mechanische knop, minder nauwkeurig, slijt sneller\n• Digitaal: Display, nauwkeurig, langere levensduur\n\nPro tip: Maak een receptenlijst met optimale tijden per product voor consistente kwaliteit.",
+        },
+        thermostaat: {
+          term: "Thermostaat — Digitaal",
+          explanation:
+            "De digitale thermostaat regelt nauwkeurig de temperatuur in de ovenruimte. Een digitale thermostaat is nauwkeuriger en stabieler dan een analoge.",
+          practical:
+            "🌡️ Voordelen digitale thermostaat:\n\n• Nauwkeurigheid: ±5°C (vs. ±15-20°C bij analoog)\n• Constante temperatuur door automatische bijsturing\n• Duidelijke digitale aflezing op display\n• Snellere opwarmtijd door actieve temperatuurbewaking\n\n📊 Temperatuurstabiliteit:\n• Analoog: Schommeling ±15-20°C rondom instelling\n• Digitaal: Schommeling ±3-5°C = consistenter bakresultaat\n\n✅ Belangrijk voor:\n• Precisie bij patisserie en banketbakkerij\n• HACCP-documentatie (kerntemperatuur bereikt)\n• Reproduceerbare resultaten bij groot volume",
         },
         capaciteit: {
           term: "Capaciteit",
@@ -344,13 +416,19 @@ export function DigitalAssistant({
         },
       };
 
-      // Find matching explanation (case insensitive)
+      // Find matching explanation (case insensitive, supports multi-word keys)
       const explanation = Object.entries(
         technicalExplanations,
-      ).find(
-        ([key]) =>
-          lowerTerm.includes(key) || key.includes(lowerTerm),
-      )?.[1];
+      ).find(([key]) => {
+        const lowerKey = key.toLowerCase();
+        // Exact match, substring match, or first word of key matches
+        return (
+          lowerTerm === lowerKey ||
+          lowerTerm.includes(lowerKey) ||
+          lowerKey.includes(lowerTerm) ||
+          lowerKey.split(" ").some((word) => word.length > 3 && lowerTerm.includes(word))
+        );
+      })?.[1];
 
       if (explanation) {
         return [
@@ -384,6 +462,45 @@ export function DigitalAssistant({
       }
     }
 
+    // Job Story 6: Alternatives — flow trigger (must come before Job Story 1 & 2 to prevent "zoek" clash)
+    if (lowerMessage.includes("ik zoek alternatieven")) {
+      setAlternatievenFlowState({ isActive: true, currentStep: 1, category: "", reden: "" });
+      return [
+        {
+          id: Date.now(),
+          text: "Goed! Ik help je graag bij het vinden van het perfecte alternatief.\n\nLaten we beginnen met de basis:\n\n**Voor welk type apparatuur zoek je een alternatief?**\n\nKies een categorie hieronder, of typ zelf het apparaat dat je al in gedachten hebt.",
+          sender: "assistant",
+          type: "text",
+          suggestions: [
+            "Combisteamer",
+            "Koelkast / koeling",
+            "Friteuse",
+            "Oven / heteluchtoven",
+            "Pizza-oven",
+            "Ander apparaat",
+          ],
+        },
+      ];
+    }
+
+    // "Ik zoek een specifiek product" — open intake
+    if (lowerMessage.includes("ik zoek een specifiek product")) {
+      return [
+        {
+          id: Date.now(),
+          text: "Perfect! Ik help je graag bij het vinden van het juiste product.\n\nOm je de beste suggesties te kunnen geven, zou ik graag wat meer willen weten:\n\n**Welk type product zoek je?**",
+          sender: "assistant",
+          type: "text",
+          suggestions: [
+            "Ovens",
+            "Vaatwassers",
+            "Werkbanken",
+            "Koelapparatuur",
+          ],
+        },
+      ];
+    }
+
     // Job Story 1 & 2: Natural language product search with context
     if (
       lowerMessage.includes("zoek") ||
@@ -406,6 +523,7 @@ export function DigitalAssistant({
           type: "text",
           suggestions: [
             "Combi-oven",
+            "Combisteamer",
             "Heteluchtoven",
             "Weet ik niet",
           ],
@@ -428,41 +546,41 @@ export function DigitalAssistant({
       return [
         {
           id: Date.now(),
-          text: 'Perfect! Ik help u graag met het vergelijken van producten.\n\n**Welke producten wilt u vergelijken?**\n\nU kunt bijvoorbeeld:\n• Een categorie noemen (bijv. "combisteamers")\n• Een specifiek merk of model zoeken\n• Een situatie beschrijven waarbij ik producten voor u zoek\n\nOf u kunt producten op de webshoppagina\'s selecteren met de "Toevoegen aan vergelijking" knop.',
+          text: "Perfect! Ik help je graag met het vergelijken van producten.\n\nOm je de beste vergelijking te kunnen geven, heb ik wat informatie nodig:\n\n**Welke producten wil je vergelijken?**\n\n• Geef me de productnamen, modelnummers of artikelcodes\n• Of beschrijf het type apparatuur waar je naar kijkt (bijvoorbeeld: \"combisteamers\", \"koelkasten\", \"friteuses\")\n\nBijvoorbeeld:\n\"Vergelijk de Rational SelfCookingCenter met de Convotherm\"\n\"Ik wil verschillende pizza-ovens vergelijken\"\n\"Artikelnummer 12345 versus 67890\"\n\nZodra je me vertelt welke producten je wilt vergelijken, haal ik alle specificaties op en laat ik je de belangrijkste verschillen zien!",
           sender: "assistant",
           type: "text",
           suggestions: [
-            "Vergelijk combisteamers",
-            "Vergelijk koelkasten",
-            "Vergelijk friteuses",
+            "Combisteamers",
+            "Koelkasten",
+            "Friteuses",
+            "Pizza-ovens",
+            "Ander product",
           ],
         },
       ];
     }
 
-    // Job Story 4: Specification explanation
+    // Job Story 4: Specification explanation — intro step
     if (
       lowerMessage.includes("betekent") ||
       lowerMessage.includes("uitleg") ||
       lowerMessage.includes("wat is") ||
       lowerMessage.includes("specificatie")
     ) {
+      setUitlegFlowActive(true);
       return [
         {
           id: Date.now(),
+          text: "Geen probleem! Ik leg je graag technische termen uit.\n\n**Over welke term wil je meer weten?**\n\nKies een term hieronder, of typ zelf een specificatie die je wilt begrijpen — dan geef ik je een heldere uitleg met praktijkvoorbeelden.",
           sender: "assistant",
-          type: "specification",
-          data: {
-            term: "Capaciteit 10x1/1 GN",
-            explanation:
-              "Dit betekent dat de combisteamer plaats heeft voor 10 gastronormbakken van het formaat 1/1 GN (530 x 325 mm). Dit is het standaardformaat in de professionele horeca.",
-            practical:
-              "In de praktijk betekent dit dat u bijvoorbeeld:\n• 10 grote bakplaten tegelijk kunt gebruiken\n• Ongeveer 80-100 porties in één keer kunt bereiden\n• Perfect geschikt is voor een middelgroot restaurant of cateringbedrijf",
-          },
+          type: "text",
           suggestions: [
-            "Vergelijk de producten",
-            "Wat is de beste keuze?",
-            "Toon andere opties",
+            "Vermogen (kW)",
+            "Capaciteit (GN)",
+            "Aansluitwaarde",
+            "Stoomfunctie",
+            "Touchscreen",
+            "Andere term",
           ],
         },
       ];
@@ -472,7 +590,8 @@ export function DigitalAssistant({
     if (
       lowerMessage.includes("welke") ||
       lowerMessage.includes("beste") ||
-      lowerMessage.includes("aanraden")
+      lowerMessage.includes("aanraden") ||
+      lowerMessage.includes("advies")
     ) {
       return [
         {
@@ -483,22 +602,21 @@ export function DigitalAssistant({
           suggestions: [
             "Bekijk alternatieven",
             "Uitleg specificaties",
-            "Waar kan ik dit kopen?",
           ],
         },
       ];
     }
 
-    // Job Story 6: Alternatives
+    // Legacy alternatives (triggered from product cards / comparisons)
     if (
       lowerMessage.includes("alternatieven") ||
-      lowerMessage.includes("andere") ||
-      lowerMessage.includes("iets anders")
+      lowerMessage.includes("bekijk alternatieven") ||
+      lowerMessage.includes("toon alternatieven")
     ) {
       return [
         {
           id: Date.now(),
-          text: "Ik begrijp dat u ook andere opties wilt bekijken. Hier zijn relevante alternatieven die ook passen bij uw situatie:",
+          text: "Hier zijn relevante alternatieven die ook passen bij jouw situatie:",
           sender: "assistant",
           type: "alternatives",
           data: {
@@ -506,31 +624,22 @@ export function DigitalAssistant({
             alternatives: [
               {
                 product: mockProducts[2],
-                reason:
-                  "Budget-vriendelijker optie (€2.600,- goedkoper) met vergelijkbare prestaties",
-                tradeoff:
-                  "Minder geavanceerde bediening, maar perfect functioneel",
+                reason: "€2.600 goedkoper — zelfde 10x1/1 GN capaciteit en 400V aansluiting",
+                tradeoff: "Display + knoppen bediening in plaats van touchscreen",
               },
               {
                 product: {
                   id: 4,
-                  name: "Rational iCombi Pro 6x1/1",
+                  name: "Rational iCombi Pro 6x1/1 GN",
                   price: "€8.999,-",
-                  category:
-                    "Keukenapparatuur › Ovens & Combisteamers",
+                  category: "Keukenapparatuur › Ovens & Combisteamers",
                 },
-                reason:
-                  "Kleinere versie als u toch minder capaciteit nodig heeft",
-                tradeoff:
-                  "40% minder capaciteit, maar ook 30% goedkoper en compacter",
+                reason: "30% kleiner formaat — zelfde premium Rational kwaliteit",
+                tradeoff: "60% minder capaciteit — alleen geschikt bij max. 60 couverts/dag",
               },
             ],
           },
-          suggestions: [
-            "Vergelijk deze opties",
-            "Welke past het best?",
-            "Terug naar originele producten",
-          ],
+          suggestions: ["Vergelijk deze opties", "Welke past het best?"],
         },
       ];
     }
@@ -551,6 +660,266 @@ export function DigitalAssistant({
     ];
   };
 
+  const getAlternatieven = (category: string, reden: string): Message[] => {
+    const lowerCat = category.toLowerCase();
+    const lowerReden = reden.toLowerCase();
+
+    const introText = `Uitstekend! Op basis van **${category}** en de reden **"${reden}"** heb ik de beste alternatieven voor je geselecteerd.\n\nHier zijn **3 alternatieven** die perfect aansluiten op jouw wensen:`;
+
+    let alternatives: any[] = [];
+    let originalProduct: any = mockProducts[0];
+
+    if (lowerCat.includes("combisteamer")) {
+      originalProduct = mockProducts[0];
+      if (lowerReden.includes("goedkoper")) {
+        alternatives = [
+          {
+            product: mockProducts[1],
+            reason: "€1.200 goedkoper dan de Rational — bewezen prestaties in de Europese horeca",
+            tradeoff: "Kleinere touchscreen (5\") — iets minder intuïtief bij drukke diensten",
+          },
+          {
+            product: mockProducts[2],
+            reason: "€2.600 goedkoper — zelfde 10x1/1 GN capaciteit en 400V aansluiting",
+            tradeoff: "Display + knoppen bediening in plaats van touchscreen",
+          },
+          {
+            product: { id: 40, name: "Houno C1.10 Combisteamer 10x1/1 GN", price: "€8.499,-", category: "Keukenapparatuur › Ovens & Combisteamers" },
+            reason: "€4.000 goedkoper — robuuste Scandinavische kwaliteit met lange levensduur",
+            tradeoff: "Kleiner dealernetwerk in Nederland voor service & onderhoud",
+          },
+        ];
+      } else if (lowerReden.includes("capaciteit")) {
+        alternatives = [
+          {
+            product: { id: 41, name: "Rational iCombi Pro 20x1/1 GN", price: "€19.499,-", category: "Keukenapparatuur › Ovens & Combisteamers" },
+            reason: "Dubbele capaciteit (20 baklagen) — zelfde intelligente iCookingControl bediening",
+            tradeoff: "Hogere investering én meer ruimte nodig (minimaal 900mm breedte)",
+          },
+          {
+            product: { id: 42, name: "Convotherm OES 20.10 Combisteamer", price: "€16.899,-", category: "Keukenapparatuur › Ovens & Combisteamers" },
+            reason: "20 baklagen voor €2.600 minder dan de Rational 20-laags",
+            tradeoff: "Minder geavanceerd programmeersysteem dan de iCombi Pro",
+          },
+          {
+            product: { id: 43, name: "Electrolux 20x1/1 GN Combisteamer", price: "€14.999,-", category: "Keukenapparatuur › Ovens & Combisteamers" },
+            reason: "Beste prijs voor een 20-laags combisteamer in zijn klasse",
+            tradeoff: "Bediening via display + knoppen, geen touchscreen",
+          },
+        ];
+      } else if (lowerReden.includes("energie")) {
+        alternatives = [
+          {
+            product: { id: 44, name: "Unox ChefTop Mind.Maps PLUS 10x1/1", price: "€10.299,-", category: "Keukenapparatuur › Ovens & Combisteamers" },
+            reason: "A-energielabel — 15% lager verbruik dankzij slimme stoomregeling",
+            tradeoff: "Minder automatische aanpassingen dan het Rational iCookingControl systeem",
+          },
+          {
+            product: { id: 45, name: "Houno CPE 10.10 Combisteamer", price: "€11.299,-", category: "Keukenapparatuur › Ovens & Combisteamers" },
+            reason: "Energiezuinig Scandinavisch ontwerp met zeer lage standby-verliezen",
+            tradeoff: "Kleiner servicenetwerk in Nederland",
+          },
+          {
+            product: { id: 46, name: "Rational iCombi Pro 6x1/1 GN", price: "€8.999,-", category: "Keukenapparatuur › Ovens & Combisteamers" },
+            reason: "30% minder energieverbruik door kleinere capaciteit — zelfde efficiënte technologie",
+            tradeoff: "60% minder baklagen — alleen geschikt bij max. 60 couverts/dag",
+          },
+        ];
+      } else if (lowerReden.includes("merk")) {
+        alternatives = [
+          {
+            product: mockProducts[1],
+            reason: "Grootste concurrent van Rational — premium kwaliteit, populair in heel Europa",
+            tradeoff: "Andere bedieningslogica — personeel heeft een korte training nodig",
+          },
+          {
+            product: mockProducts[2],
+            reason: "Sterk Europees merk met uitgebreid servicenetwerk in Nederland",
+            tradeoff: "Minder geavanceerde automatische kookfuncties dan de Rational",
+          },
+          {
+            product: { id: 44, name: "Unox ChefTop Mind.Maps PLUS 10x1/1", price: "€10.299,-", category: "Keukenapparatuur › Ovens & Combisteamers" },
+            reason: "Italiaans topkwaliteit — uitstekende stoomregeling en groot receptengeheugen",
+            tradeoff: "Kleiner dealer- en servicenetwerk buiten de Randstad",
+          },
+        ];
+      } else {
+        // Compactere versie (default)
+        alternatives = [
+          {
+            product: { id: 46, name: "Rational iCombi Pro 6x1/1 GN", price: "€8.999,-", category: "Keukenapparatuur › Ovens & Combisteamers" },
+            reason: "30% kleiner formaat — zelfde premium Rational kwaliteit en touchscreen bediening",
+            tradeoff: "60% minder capaciteit — alleen geschikt bij max. 60 couverts/dag",
+          },
+          {
+            product: { id: 47, name: "Convotherm mini OES 6.10 GN", price: "€7.499,-", category: "Keukenapparatuur › Ovens & Combisteamers" },
+            reason: "Tafelmodel — ideaal voor kleine keukens met beperkte vloerruimte",
+            tradeoff: "Beperktere capaciteit en minder programmeerbare functies",
+          },
+          {
+            product: { id: 48, name: "Bartscher Heteluchtoven AT90", price: "€459,-", category: "Keukenapparatuur › Ovens" },
+            reason: "Ultralichte instap: compact, eenvoudig en ideaal voor kleine productie",
+            tradeoff: "Geen stoomfunctie — niet geschikt voor professionele combi-bereiding",
+          },
+        ];
+      }
+    } else if (lowerCat.includes("koelkast") || lowerCat.includes("koeling")) {
+      originalProduct = { id: 50, name: "Liebherr FKvesf 1803 Koelkast", price: "€1.299,-" };
+      alternatives = [
+        {
+          product: { id: 51, name: "Gram PLUS K 210 RG L4N", price: "€1.149,-", category: "Koeling › Koelkasten" },
+          reason: lowerReden.includes("goedkoper") ? "€150 goedkoper — A+++ energielabel bespaart op jaarbasis €80 aan energiekosten" : "A+++ energielabel — laagste energieverbruik in zijn klasse",
+          tradeoff: "Iets minder interne opslagruimte door dikkere isolatiewanden",
+        },
+        {
+          product: { id: 52, name: "Bartscher Horeca Koelkast 200L", price: "€899,-", category: "Koeling › Koelkasten" },
+          reason: "€400 goedkoper — betrouwbare horeca koelkast voor dagelijks gebruik",
+          tradeoff: "Energieklasse C — hogere energiekosten op jaarbasis (ca. €60 meer)",
+        },
+        {
+          product: { id: 53, name: "Polar Horeca Koelkast 150L", price: "€749,-", category: "Koeling › Koelkasten" },
+          reason: "Compactere versie — ideaal als aanvulling of voor kleinere ruimtes",
+          tradeoff: "25% minder inhoud — voor grote volumes niet toereikend",
+        },
+      ];
+    } else if (lowerCat.includes("friteuse")) {
+      originalProduct = { id: 60, name: "Horeca Friteuse 2x8L", price: "€649,-" };
+      alternatives = [
+        {
+          product: { id: 61, name: "Bartscher Friteuse 2x10L", price: "€549,-", category: "Keukenapparatuur › Frituurapparatuur" },
+          reason: lowerReden.includes("goedkoper") ? "€100 goedkoper — meer capaciteit (2x10L) voor minder geld" : "Meer capaciteit (2x10L) — ideaal voor hogere productie",
+          tradeoff: "Iets langere verwarmingstijd door grotere inhoud",
+        },
+        {
+          product: { id: 62, name: "Hendi Friteuse 1x6L Tafelmodel", price: "€299,-", category: "Keukenapparatuur › Frituurapparatuur" },
+          reason: "Compact tafelmodel — eenvoudig te plaatsen in kleine keukens",
+          tradeoff: "Minder capaciteit (1 bad) — niet geschikt voor grote volumes",
+        },
+        {
+          product: { id: 63, name: "Roller Grill Friteuse 2x8L", price: "€589,-", category: "Keukenapparatuur › Frituurapparatuur" },
+          reason: "Frans topkwaliteit — bekende naam in professionele horeca, uitstekende warmteverdeling",
+          tradeoff: "Vergelijkbare prijs, voornamelijk meerwaarde in merk en service",
+        },
+      ];
+    } else if (lowerCat.includes("oven") || lowerCat.includes("hetelucht")) {
+      originalProduct = { id: 70, name: "Bartscher Heteluchtoven AT90", price: "€459,-" };
+      alternatives = [
+        {
+          product: { id: 71, name: "Hendi Heteluchtoven 2,5 kW", price: "€389,-", category: "Keukenapparatuur › Ovens" },
+          reason: lowerReden.includes("goedkoper") ? "€70 goedkoper — iets compacter en ideaal voor kleine bakkerijen" : "Compact model — ideaal voor kleine bakkerijen of lunchrooms",
+          tradeoff: "10% minder vermogen (2,5 kW) — iets langere baktijden bij grote volumes",
+        },
+        {
+          product: { id: 72, name: "Bartscher Heteluchtoven 4,2 kW", price: "€649,-", category: "Keukenapparatuur › Ovens" },
+          reason: "50% meer capaciteit (6 bakplaten) — efficiënter bij grotere volumes",
+          tradeoff: "Hoger energieverbruik en hogere aanschafprijs",
+        },
+        {
+          product: { id: 73, name: "Unox XAFT-04HS-ELDV", price: "€1.249,-", category: "Keukenapparatuur › Ovens" },
+          reason: "Digitale bediening met timer + stoomfunctie voor beter bakresultaat",
+          tradeoff: "Aanzienlijk hogere investering — geschikt voor professionele bakkerijen",
+        },
+      ];
+    } else if (lowerCat.includes("pizza")) {
+      originalProduct = { id: 80, name: "Pizzaoven elektrisch 1-kamer", price: "€899,-" };
+      alternatives = [
+        {
+          product: { id: 81, name: "Hendi Pizzaoven 1-kamer 3 kW", price: "€699,-", category: "Keukenapparatuur › Pizza-ovens" },
+          reason: lowerReden.includes("goedkoper") ? "€200 goedkoper — betrouwbare pizzaoven voor dagelijks gebruik" : "Betrouwbare basisuitvoering — ideaal voor lage tot middelmatige productie",
+          tradeoff: "Minder vermogen — langere opwarmtijd bij intensief gebruik",
+        },
+        {
+          product: { id: 82, name: "Pizzaoven elektrisch 2-kamers", price: "€1.499,-", category: "Keukenapparatuur › Pizza-ovens" },
+          reason: "Dubbele productiecapaciteit — 2 pizza's tegelijk op verschillende temperaturen",
+          tradeoff: "Hogere aanschafprijs en meer ruimte nodig",
+        },
+        {
+          product: { id: 83, name: "Effeuno P134HA Pizzaoven", price: "€1.199,-", category: "Keukenapparatuur › Pizza-ovens" },
+          reason: "Tot 500°C — echte Napolitaanse pizza mogelijk, uitstekende kwaliteit korst",
+          tradeoff: "Hogere energiebehoefte (3,2 kW) en premium prijs",
+        },
+      ];
+    } else {
+      alternatives = [
+        {
+          product: { id: 90, name: `${category} — Budget model`, price: "Op aanvraag" },
+          reason: "Voordelige instap met de kernfuncties die je nodig hebt",
+          tradeoff: "Minder geavanceerde functies en eenvoudigere bediening",
+        },
+        {
+          product: { id: 91, name: `${category} — Mid-range model`, price: "Op aanvraag" },
+          reason: "Beste prijs-kwaliteitsverhouding — meest verkochte optie in zijn klasse",
+          tradeoff: "Niet het meest uitgebreide model op de markt",
+        },
+        {
+          product: { id: 92, name: `${category} — Premium model`, price: "Op aanvraag" },
+          reason: "Meeste functies en langste levensduur — ideaal voor intensief dagelijks gebruik",
+          tradeoff: "Hogere investering vereist — terugverdientijd ca. 2-3 jaar",
+        },
+      ];
+    }
+
+    return [
+      {
+        id: Date.now(),
+        text: introText,
+        sender: "assistant",
+        type: "text",
+      },
+      {
+        id: Date.now() + 1,
+        sender: "assistant",
+        type: "alternatives",
+        data: { original: originalProduct, alternatives },
+        suggestions: [
+          "Vergelijk deze opties",
+          "Meer details over optie 1",
+          "Ik zoek andere alternatieven",
+        ],
+      },
+    ];
+  };
+
+  const handleAlternatievenFlow = (answer: string) => {
+    const { currentStep, category } = alternatievenFlowState;
+
+    if (currentStep === 1) {
+      setAlternatievenFlowState((prev) => ({ ...prev, currentStep: 2, category: answer }));
+      setIsThinking(true);
+      setTimeout(() => {
+        const response: Message = {
+          id: Date.now(),
+          text: `Super! Je zoekt een alternatief voor een **${answer}**.\n\nOm je de meest relevante opties te kunnen geven:\n\n**Wat is de reden dat je een alternatief zoekt?**\n\nKies wat het beste bij jou past, dan selecteer ik de juiste alternatieven voor je.`,
+          sender: "assistant",
+          type: "text",
+          suggestions: [
+            "Goedkoper alternatief",
+            "Meer capaciteit nodig",
+            "Energiezuiniger model",
+            "Ander merk / fabrikant",
+            "Compactere versie",
+          ],
+        };
+        setMessages((prev) => [...prev, response]);
+        setIsThinking(false);
+      }, 800);
+    } else if (currentStep === 2) {
+      const currentCategory = category;
+      setAlternatievenFlowState((prev) => ({
+        ...prev,
+        currentStep: 3,
+        reden: answer,
+        isActive: false,
+      }));
+      setIsThinking(true);
+      setTimeout(() => {
+        const responses = getAlternatieven(currentCategory, answer);
+        setMessages((prev) => [...prev, ...responses]);
+        setIsThinking(false);
+      }, 1200);
+    }
+  };
+
   const handleQuickAction = (question: string) => {
     const userMessage: Message = {
       id: Date.now(),
@@ -560,6 +929,24 @@ export function DigitalAssistant({
     };
 
     setMessages((prev) => [...prev, userMessage]);
+
+    // Check if this is part of the uitleg flow
+    if (uitlegFlowActive) {
+      setUitlegFlowActive(false);
+      setIsThinking(true);
+      setTimeout(() => {
+        const responses = getAssistantResponse(`Leg uit: ${question}`);
+        setMessages((prev) => [...prev, ...responses]);
+        setIsThinking(false);
+      }, 800);
+      return;
+    }
+
+    // Check if this is part of the alternatieven flow
+    if (alternatievenFlowState.isActive) {
+      handleAlternatievenFlow(question);
+      return;
+    }
 
     // Check if this is part of the comparison flow
     if (comparisonFlowState.isActive) {
@@ -764,33 +1151,61 @@ export function DigitalAssistant({
   const handleComparisonFlow = (answer: string) => {
     setIsThinking(true);
     setTimeout(() => {
-      const { currentStep, products, searchQuery } =
-        comparisonFlowState;
+      const { currentStep, searchQuery } = comparisonFlowState;
 
-      // Step 1: Search query
+      // Step 1: Category selected → show found products, ask which pair to compare
       if (currentStep === 1) {
+        const lowerAnswer = answer.toLowerCase();
+        let categoryLabel = "combisteamers";
+        if (lowerAnswer.includes("koelkast")) categoryLabel = "koelkasten";
+        else if (lowerAnswer.includes("friteuse")) categoryLabel = "friteuses";
+        else if (lowerAnswer.includes("pizza")) categoryLabel = "pizza-ovens";
+        else if (lowerAnswer.includes("ander")) categoryLabel = "producten";
+
         setComparisonFlowState((prev) => ({
           ...prev,
           currentStep: 2,
           searchQuery: answer,
         }));
 
-        // For now, just show the first two products as comparison
-        const selectedProducts = [
-          mockProducts[0],
-          mockProducts[1],
-        ];
+        const [p1, p2, p3] = mockProducts;
+        const foundMessage: Message = {
+          id: Date.now(),
+          text: `Ik heb 3 populaire ${categoryLabel} gevonden:\n\n**#1** ${p1.name} — ${p1.price}\n**#2** ${p2.name} — ${p2.price}\n**#3** ${p3.name} — ${p3.price}\n\nWelke twee wilt u met elkaar vergelijken?`,
+          sender: "assistant",
+          type: "text",
+          suggestions: [
+            `Vergelijk #1 en #2`,
+            `Vergelijk #1 en #3`,
+            `Vergelijk #2 en #3`,
+          ],
+        };
 
-        const comparisonMessages =
-          getComparison(selectedProducts);
+        setMessages((prev) => [...prev, foundMessage]);
+        setIsThinking(false);
+        return;
+      }
+
+      // Step 2: Pair selected → trigger comparison view
+      if (currentStep === 2) {
+        let selectedProducts: typeof mockProducts = [];
+
+        if (answer.includes("#1") && answer.includes("#2")) {
+          selectedProducts = [mockProducts[0], mockProducts[1]];
+        } else if (answer.includes("#1") && answer.includes("#3")) {
+          selectedProducts = [mockProducts[0], mockProducts[2]];
+        } else if (answer.includes("#2") && answer.includes("#3")) {
+          selectedProducts = [mockProducts[1], mockProducts[2]];
+        } else {
+          selectedProducts = [mockProducts[0], mockProducts[1]];
+        }
+
+        const comparisonMessages = getComparison(selectedProducts);
         setMessages((prev) => [...prev, ...comparisonMessages]);
         setIsThinking(false);
 
-        // Call onCompareProducts
         if (onCompareProducts) {
-          onCompareProducts(selectedProducts, {
-            searchQuery: answer,
-          });
+          onCompareProducts(selectedProducts, { searchQuery });
         }
 
         // Reset comparison flow
@@ -1052,7 +1467,10 @@ export function DigitalAssistant({
       setInputValue("");
       setIsThinking(false);
       setHasRecommendedProducts(false);
+      setUitlegFlowActive(false);
+      setAlternatievenFlowState({ isActive: false, currentStep: 1, category: "", reden: "" });
       setQuestionnaireState({ isActive: false, currentStep: 1, apparaatType: "", answers: {} });
+      setComparisonFlowState({ isActive: false, currentStep: 1, products: [], searchQuery: "" });
       setMessages([
         {
           id: Date.now(),
@@ -1060,10 +1478,11 @@ export function DigitalAssistant({
           sender: "assistant",
           type: "text",
           suggestions: [
-            "Ik ben op zoek naar een oven",
-            "Is dit product geschikt voor mijn situatie",
+            "Ik zoek een specifiek product",
             "Ik wil producten vergelijken",
-            "Leg de specificaties uit",
+            "Ik heb advies nodig",
+            "Ik zoek alternatieven",
+            "Ik heb uitleg nodig",
           ],
         },
       ]);
@@ -1227,8 +1646,8 @@ export function DigitalAssistant({
             <p className="text-xs font-medium text-gray-700 mb-1">
               In de praktijk:
             </p>
-            <p className="text-xs text-gray-600 whitespace-pre-line">
-              {practical}
+            <p className="text-sm text-gray-800 whitespace-pre-line leading-relaxed">
+              {practical.replace(/\*\*/g, '')}
             </p>
           </div>
         </div>

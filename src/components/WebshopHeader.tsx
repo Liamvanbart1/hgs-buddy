@@ -309,9 +309,9 @@ export function WebshopHeader({
                           onOpenAssistant?.();
                           setIsSearchFocused(false);
                         }}
-                        className="w-full flex items-center gap-3 p-3 bg-[#86a201] hover:bg-[#6d8301] text-white rounded-[50px] transition-colors"
+                        className="group w-full flex items-center gap-3 p-3 bg-[#86a201] hover:bg-white text-white hover:text-[#86a201] border-2 border-transparent hover:border-[#86a201] rounded-[50px] transition-colors"
                       >
-                        <div className="w-5 h-5 flex-shrink-0">
+                        <div className="w-5 h-5 flex-shrink-0 text-white group-hover:text-[#86a201]">
                           <Group />
                         </div>
                         <div className="text-left">

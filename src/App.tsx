@@ -3,7 +3,6 @@ import { CategoryCard } from './components/CategoryCard';
 import { DigitalAssistant } from './components/DigitalAssistant';
 import { ProductCard } from './components/ProductCard';
 import { CompactProductCard } from './components/CompactProductCard';
-import { TextSelectionPopup } from './components/TextSelectionPopup';
 import { CategoryPage } from './components/CategoryPage';
 import { ProductPage } from './components/ProductPage';
 import { ComparisonView } from './components/ComparisonView';
@@ -505,9 +504,6 @@ export default function App() {
           onHoverFloatingButton={(isHovering) => setIsAssistantPeeking(isHovering)}
         />
       )}
-
-      {/* Text Selection Popup */}
-      <TextSelectionPopup onAskAssistant={handleAskAssistant} />
 
       {/* Floating Comparison Button */}
       <AnimatePresence>

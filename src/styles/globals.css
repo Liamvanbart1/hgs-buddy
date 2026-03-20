@@ -183,4 +183,9 @@
 
 html {
   font-size: var(--font-size);
+  overflow: hidden;
+}
+
+body {
+  overflow: hidden;
 }

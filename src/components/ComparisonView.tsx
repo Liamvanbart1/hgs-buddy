@@ -64,17 +64,54 @@ export function ComparisonView({
     value1: string,
     value2: string,
   ): number | null => {
-    if (key === "Vermogen") {
+    // Higher is better: Vermogen, Capaciteit (smoothies), Automatische programma's, Toerental
+    if (
+      key === "Vermogen" ||
+      key === "Automatische programma's"
+    ) {
       const v1 = parseFloat(value1.replace(/[^0-9.]/g, ""));
       const v2 = parseFloat(value2.replace(/[^0-9.]/g, ""));
+      if (!isNaN(v1) && !isNaN(v2)) {
+        if (v1 > v2) return 1;
+        if (v2 > v1) return 2;
+      }
+    }
+    // Higher smoothies = better
+    if (key === "Capaciteit" && value1.includes("smoothies") && value2.includes("smoothies")) {
+      const v1 = parseFloat(value1.replace(/[^0-9]/g, ""));
+      const v2 = parseFloat(value2.replace(/[^0-9]/g, ""));
       if (v1 > v2) return 1;
       if (v2 > v1) return 2;
     }
+    // Lower geluidsniveau = better
+    if (key === "Geluidsniveau") {
+      const v1 = parseFloat(value1.replace(/[^0-9.]/g, ""));
+      const v2 = parseFloat(value2.replace(/[^0-9.]/g, ""));
+      if (!isNaN(v1) && !isNaN(v2)) {
+        if (v1 < v2) return 1;
+        if (v2 < v1) return 2;
+      }
+    }
+    // Touchscreen with more programmes = better
     if (
-      key === "Type bediening" &&
+      key === "Bediening" &&
       value1.includes("Touchscreen") &&
       value2.includes("Touchscreen")
     ) {
+      const v1 = parseFloat(value1.match(/\d+/)?.[0] || "0");
+      const v2 = parseFloat(value2.match(/\d+/)?.[0] || "0");
+      if (v1 > v2) return 1;
+      if (v2 > v1) return 2;
+    }
+    // Ingebouwde geluidskap = better
+    if (key === "Geluidskap") {
+      const built1 = value1.toLowerCase().includes("ingebouwd");
+      const built2 = value2.toLowerCase().includes("ingebouwd");
+      if (built1 && !built2) return 1;
+      if (built2 && !built1) return 2;
+    }
+    // Legacy support
+    if (key === "Type bediening") {
       const v1 = parseFloat(value1.match(/\d+/)?.[0] || "0");
       const v2 = parseFloat(value2.match(/\d+/)?.[0] || "0");
       if (v1 > v2) return 1;
