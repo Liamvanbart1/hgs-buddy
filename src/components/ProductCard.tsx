@@ -74,28 +74,11 @@ export function ProductCard({
 
       {/* Bottom Section: Everything else */}
       <div className="p-4 flex flex-col flex-1" style={{ userSelect: 'text' }}>
-        {/* Category Tag and Compare Button */}
-        <div className="mb-3 flex items-center justify-between gap-4">
-          <div>
-            <span className="inline-block bg-[#86a201] text-white text-xs px-2 py-1 rounded">
-              {category.split(' › ')[0]}
-            </span>
-          </div>
-          
-          {onAddToComparison && (
-            <button
-              className="flex items-center gap-2 px-3 py-2 border border-[#86a201] text-[#86a201] hover:bg-[#86a201] hover:text-white rounded-full transition-colors text-sm"
-              onClick={(e) => {
-                e.stopPropagation();
-                onAddToComparison(id);
-              }}
-            >
-              <div className="w-5 h-5 flex-shrink-0">
-                <Group />
-              </div>
-              <span className="whitespace-nowrap">Vergelijk met de HGS Buddy</span>
-            </button>
-          )}
+        {/* Category Tag */}
+        <div className="mb-3">
+          <span className="inline-block bg-[#86a201] text-white text-xs px-2 py-1 rounded">
+            {category.split(' › ')[0]}
+          </span>
         </div>
 
         {/* Specifications with checkmarks */}

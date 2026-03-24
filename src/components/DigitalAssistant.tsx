@@ -989,12 +989,13 @@ export function DigitalAssistant({
       const lastSuggestion = [...messages]
         .reverse()
         .find((m) => m.type === "product-suggestion");
-      if (lastSuggestion && onStartComparison) {
-        onStartComparison(lastSuggestion.data.products);
+      const productsToCompare = lastSuggestion?.data?.products ?? mockProducts;
+      if (onStartComparison) {
+        onStartComparison(productsToCompare);
       }
       setIsThinking(true);
       setTimeout(() => {
-        const responses = getComparison(mockProducts.slice(0, 2));
+        const responses = getComparison(productsToCompare.slice(0, 2));
         setMessages((prev) => [...prev, ...responses]);
         setIsThinking(false);
       }, 800);
@@ -1224,16 +1225,15 @@ export function DigitalAssistant({
     setTimeout(() => {
       const lowerAnswer = answer.toLowerCase();
 
-      // Step 1: Category selected → directly trigger comparison
+      // Step 1: Category selected → show badge view first, comparison via chat suggestion
       if (lowerAnswer.includes("oven")) {
-        // Combisteamer comparison
+        // Show oven recommendations in badge view
         const selectedProducts = [mockProducts[0], mockProducts[1]];
         const comparisonMessages = getComparison(selectedProducts);
         setMessages((prev) => [...prev, ...comparisonMessages]);
-        if (onStartComparison) onStartComparison(selectedProducts);
-        if (onCompareProducts) onCompareProducts(selectedProducts, {});
+        if (onRecommendProducts) onRecommendProducts(mockProducts);
       } else if (lowerAnswer.includes("keukenapparaat") || lowerAnswer.includes("keukenapparaten") || lowerAnswer.includes("blender")) {
-        // Blender comparison
+        // Blender comparison — direct ComparisonView
         const comparisonMessages = getBlenderComparison();
         setMessages((prev) => [...prev, ...comparisonMessages]);
         if (onStartComparison) onStartComparison(blenderProducts);

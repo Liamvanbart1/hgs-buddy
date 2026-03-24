@@ -457,13 +457,18 @@ export default function App() {
               className="fixed top-0 right-0 h-full w-[25vw]"
               style={{ zIndex: 60 }}
             >
-              <DigitalAssistant 
-                onClose={handleCloseAssistant} 
+              <DigitalAssistant
+                onClose={handleCloseAssistant}
                 onRecommendProducts={(products) => setRecommendedProducts(products)}
                 onCompareProducts={(products, context) => {
                   setComparisonProducts(products);
                   setComparisonContext(context);
-                  setRecommendedProducts([]); // Clear product grid when showing comparison
+                  setRecommendedProducts([]);
+                }}
+                onStartComparison={(products) => {
+                  setComparisonProducts(products.slice(0, 2));
+                  setComparisonContext({});
+                  setRecommendedProducts([]);
                 }}
                 externalQuery={assistantQuery}
                 onExternalQueryHandled={() => setAssistantQuery(null)}

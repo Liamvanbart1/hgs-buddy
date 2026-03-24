@@ -490,7 +490,7 @@ export function CategoryPage({
             />
             
             {/* Left panel: ComparisonView OR Aanbevelingen */}
-            {showComparison && comparisonProducts.length === 2 ? (
+            {showComparison && comparisonProducts.length >= 2 ? (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -579,7 +579,7 @@ export function CategoryPage({
                 onClose={handleCloseAssistant} 
                 onRecommendProducts={(products) => setRecommendedProducts(products)}
                 onStartComparison={(products) => {
-                  setComparisonProducts(products);
+                  setComparisonProducts(products.slice(0, 2));
                   setShowComparison(true);
                 }}
                 externalQuery={assistantQuery}

@@ -197,7 +197,7 @@ export function ComparisonView({
   return (
     <div className="bg-white rounded-xl shadow-lg flex flex-col h-full">
       {/* ── HEADER ── */}
-      <div className="px-8 pt-6 pb-4 border-b border-gray-100 flex-shrink-0">
+      <div className="px-8 pt-5 pb-3 border-b border-gray-100 flex-shrink-0">
         {onBackToRecommendations && showBackButton && (
           <button
             className="mb-4 flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-4 rounded-lg font-semibold transition-colors text-sm"
@@ -215,7 +215,7 @@ export function ComparisonView({
       </div>
 
       {/* ── CONTENT (no scroll) ── */}
-      <div className="flex-1 overflow-hidden px-8 py-5 flex flex-col gap-5">
+      <div className="flex-1 overflow-hidden px-8 py-4 flex flex-col gap-4">
 
         {/* ── PRODUCT HEADERS (outside table) ── */}
         <div className="flex flex-shrink-0">
@@ -223,7 +223,7 @@ export function ComparisonView({
           <div className="w-[36%]" />
           {/* Product 1 */}
           <div className="w-[32%] px-5 flex flex-col items-center gap-2">
-            <div className="w-full h-40 bg-gray-50 rounded-xl overflow-hidden flex items-center justify-center p-2">
+            <div className="w-full h-44 bg-gray-50 rounded-xl overflow-hidden flex items-center justify-center p-2">
               <img src={product1?.imageUrl} alt={product1?.name} className="max-h-full max-w-full object-contain" />
             </div>
             <span className="font-semibold text-gray-900 text-sm text-center leading-snug">{product1?.name}</span>
@@ -238,7 +238,7 @@ export function ComparisonView({
           </div>
           {/* Product 2 */}
           <div className="w-[32%] px-5 flex flex-col items-center gap-2">
-            <div className="w-full h-40 bg-gray-50 rounded-xl overflow-hidden flex items-center justify-center p-2">
+            <div className="w-full h-44 bg-gray-50 rounded-xl overflow-hidden flex items-center justify-center p-2">
               <img src={product2?.imageUrl} alt={product2?.name} className="max-h-full max-w-full object-contain" />
             </div>
             <span className="font-semibold text-gray-900 text-sm text-center leading-snug">{product2?.name}</span>
@@ -268,16 +268,16 @@ export function ComparisonView({
 
               {/* Price row */}
               <tr className="bg-gray-50 border-b border-gray-200">
-                <td className="px-6 py-3.5 font-semibold text-gray-700 border-r border-gray-200 text-sm">
+                <td className="px-6 py-2.5 font-semibold text-gray-700 border-r border-gray-200 text-sm">
                   Prijs
                 </td>
-                <td className={`px-5 py-3.5 text-center border-r border-gray-200 text-sm font-semibold ${
+                <td className={`px-5 py-2.5 text-center border-r border-gray-200 text-sm font-semibold ${
                   price1 < price2 ? "text-[#86a201]" : "text-gray-900"
                 }`}>
                   {product1?.price}
                   {price1 < price2 && <div className="text-xs font-normal text-[#86a201]">goedkoopst</div>}
                 </td>
-                <td className={`px-5 py-3.5 text-center text-sm font-semibold ${
+                <td className={`px-5 py-2.5 text-center text-sm font-semibold ${
                   price2 < price1 ? "text-[#86a201]" : "text-gray-900"
                 }`}>
                   {product2?.price}
@@ -298,10 +298,10 @@ export function ComparisonView({
                     key={key}
                     className={`border-b border-gray-100 ${isEven ? "bg-white" : "bg-gray-50/60"}`}
                   >
-                    <td className="px-6 py-3.5 text-sm text-gray-600 font-medium border-r border-gray-200">
+                    <td className="px-6 py-2.5 text-sm text-gray-600 font-medium border-r border-gray-200">
                       {key}
                     </td>
-                    <td className={`px-5 py-3.5 text-sm text-center border-r border-gray-200 ${
+                    <td className={`px-5 py-2.5 text-sm text-center border-r border-gray-200 ${
                       winner === 1 ? "font-semibold text-[#86a201] bg-[#86a201]/5" : "text-gray-800"
                     }`}>
                       <div className="flex items-center justify-center gap-1.5">
@@ -309,7 +309,7 @@ export function ComparisonView({
                         {value1}
                       </div>
                     </td>
-                    <td className={`px-5 py-3.5 text-sm text-center ${
+                    <td className={`px-5 py-2.5 text-sm text-center ${
                       winner === 2 ? "font-semibold text-[#86a201] bg-[#86a201]/5" : "text-gray-800"
                     }`}>
                       <div className="flex items-center justify-center gap-1.5">
@@ -327,7 +327,7 @@ export function ComparisonView({
         {/* ── RECOMMENDATION SUMMARY ── */}
         {recommendation && (
           <div className="border-2 border-[#86a201] rounded-xl overflow-hidden shadow-sm flex-shrink-0">
-            <div className="bg-[#86a201] px-6 py-3 flex items-center gap-3">
+            <div className="bg-[#86a201] px-6 py-2 flex items-center gap-3">
               <svg
                 className="w-5 h-5 text-white flex-shrink-0"
                 fill="none"
@@ -346,7 +346,7 @@ export function ComparisonView({
               </h3>
             </div>
 
-            <div className="px-6 py-5 space-y-3.5">
+            <div className="px-6 py-4 space-y-3">
               {recommendation.reasons.map((reason, i) => (
                 <div key={i} className="flex items-start gap-3">
                   <div className="w-6 h-6 rounded-full bg-[#86a201] flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -372,11 +372,11 @@ export function ComparisonView({
 
         {/* ── ACTION BUTTONS ── */}
         <div className="flex gap-4 flex-shrink-0">
-          <button className="flex-1 bg-[#86a201] hover:bg-white hover:text-[#86a201] border-2 border-transparent hover:border-[#86a201] text-white py-3 px-4 rounded-[50px] font-semibold transition-colors text-sm">
+          <button className="flex-1 bg-[#86a201] hover:bg-white hover:text-[#86a201] border-2 border-transparent hover:border-[#86a201] text-white py-2.5 px-4 rounded-[50px] font-semibold transition-colors text-sm">
             Bekijk{" "}
             {recommendation?.recommended.name.split(" - ")[0]}
           </button>
-          <button className="flex-1 border-2 border-gray-300 hover:border-gray-400 text-gray-700 py-3 px-4 rounded-[50px] font-semibold transition-colors text-sm">
+          <button className="flex-1 border-2 border-gray-300 hover:border-gray-400 text-gray-700 py-2.5 px-4 rounded-[50px] font-semibold transition-colors text-sm">
             Beide in winkelwagen
           </button>
         </div>
