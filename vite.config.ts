@@ -4,6 +4,7 @@
   import path from 'path';
 
   export default defineConfig({
+  base: '/HGS-Buddy_v1/',
     plugins: [react()],
     resolve: {
       extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
