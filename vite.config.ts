@@ -5,6 +5,7 @@
   import path from 'path';
 
   export default defineConfig({
+  base: '/HGS-Buddy_Final/',
     plugins: [react(), tailwindcss()],
     resolve: {
       extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
