@@ -45,6 +45,10 @@ export default function App() {
   const handleCloseAssistant = () => {
     setIsAssistantOpen(false);
     setIsAssistantPeeking(false);
+    // Reset recommendation state — page is only accessible via fresh chat search
+    setRecommendedProducts([]);
+    setComparisonProducts(null);
+    setComparisonContext(null);
   };
 
   const handleAskAssistant = (text: string) => {
@@ -505,29 +509,7 @@ export default function App() {
         />
       )}
 
-      {/* Floating Comparison Button */}
-      <AnimatePresence>
-        {isAssistantOpen && comparisonSelection.length === 2 && !comparisonProducts && (
-          <motion.div
-            initial={{ y: 100, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 100, opacity: 0 }}
-            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed bottom-8 left-1/2 transform -translate-x-1/2"
-            style={{ zIndex: 70 }}
-          >
-            <button
-              onClick={handleStartComparison}
-              className="bg-[#86a201] hover:bg-[#6d8301] text-white px-8 py-4 rounded-full shadow-2xl flex items-center gap-3 transition-colors"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-              </svg>
-              <span className="text-lg font-semibold">Vergelijk {comparisonSelection.length} producten</span>
-            </button>
-          </motion.div>
-        )}
-      </AnimatePresence>
+
     </div>
   );
 }

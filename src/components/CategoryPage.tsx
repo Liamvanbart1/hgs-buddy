@@ -7,9 +7,10 @@ import image_1ffa7b5f3104465908ba895260102fa09113200e from 'figma:asset/1ffa7b5f
 import { useState } from 'react';
 import { WebshopHeader } from './WebshopHeader';
 import { ProductCard } from './ProductCard';
+import { CompactProductCard } from './CompactProductCard';
 import { DigitalAssistant } from './DigitalAssistant';
 import { motion, AnimatePresence } from 'motion/react';
-import { ChevronDown, ChevronRight, ShoppingCart, Scale } from 'lucide-react';
+import { ChevronDown, ChevronRight, ShoppingCart, BarChart2 } from 'lucide-react';
 import Group from '../imports/Group';
 import { ComparisonView } from './ComparisonView';
 
@@ -380,7 +381,6 @@ export function CategoryPage({
                         onClick={() => onNavigateToProduct?.()}
                       >
                         <img src={product.imageUrl} alt={product.name} className="w-full h-full object-contain" />
-                        {/* Badge */}
                         {product.id === 1 && (
                           <div className="absolute top-3 left-3 bg-gray-200 text-gray-800 px-3 py-1 rounded text-xs font-medium">
                             RVS
@@ -391,7 +391,6 @@ export function CategoryPage({
                             BEST SELLER
                           </div>
                         )}
-                        {/* Add to cart button */}
                         <button 
                           className="absolute bottom-3 right-3 bg-[#ff6b35] hover:bg-[#ff5520] text-white p-2.5 rounded-lg transition-colors"
                           onClick={(e) => e.stopPropagation()}
@@ -475,7 +474,7 @@ export function CategoryPage({
         </main>
       </div>
 
-      {/* Digital Assistant Overlay with Products - Right side */}
+      {/* Digital Assistant Overlay - Right side */}
       <AnimatePresence>
         {isAssistantOpen && (
           <>
@@ -490,7 +489,7 @@ export function CategoryPage({
               onClick={handleCloseAssistant}
             />
             
-            {/* Comparison View or Products Grid - Takes remaining space left of assistant */}
+            {/* Left panel: ComparisonView OR Aanbevelingen */}
             {showComparison && comparisonProducts.length === 2 ? (
               <motion.div
                 initial={{ opacity: 0 }}
@@ -498,11 +497,7 @@ export function CategoryPage({
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.4, delay: 0.2 }}
                 className="fixed top-0 left-0 h-full overflow-y-auto"
-                style={{ 
-                  zIndex: 56,
-                  width: 'calc(100% - 25vw)',
-                  paddingRight: '2rem'
-                }}
+                style={{ zIndex: 56, width: 'calc(100% - 25vw)', paddingRight: '2rem' }}
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="container mx-auto px-8 py-8">
@@ -517,40 +512,59 @@ export function CategoryPage({
                   />
                 </div>
               </motion.div>
-            ) : recommendedProducts.length > 0 && (() => {
-              let gridCols = 'grid-cols-1';
-              if (recommendedProducts.length <= 4) {
-                gridCols = 'grid-cols-2';
-              } else if (recommendedProducts.length <= 6) {
-                gridCols = 'grid-cols-3';
-              } else {
-                gridCols = 'grid-cols-4';
-              }
-              
-              return (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.4, delay: 0.2 }}
-                  className="fixed top-0 left-0 h-full overflow-y-auto"
-                  style={{ 
-                    zIndex: 56,
-                    width: 'calc(100% - 25vw)',
-                    paddingRight: '2rem'
-                  }}
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <div className="container mx-auto px-8 py-8">
-                    <div className={`grid ${gridCols} gap-6`}>
-                      {recommendedProducts.map((product) => (
-                        <ProductCard key={product.id} {...product} />
+            ) : recommendedProducts.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.4, delay: 0.2 }}
+                className="fixed top-0 left-0 h-full overflow-y-auto"
+                style={{ zIndex: 56, width: 'calc(100% - 25vw)' }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="h-full overflow-y-auto px-8 py-6">
+                  <div className="space-y-8">
+                    {/* Top 2 aanbevolen producten met badges */}
+                    <div className="grid grid-cols-2 gap-6">
+                      {recommendedProducts.slice(0, 2).map((product, index) => (
+                        <div key={product.id} className="relative mt-4">
+                          {index === 0 && (
+                            <div className="absolute -top-3 -left-3 z-10 bg-[#86a201] text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
+                              🏆 Beste Match
+                            </div>
+                          )}
+                          {index === 1 && (
+                            <div className="absolute -top-3 -left-3 z-10 bg-gray-900 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
+                              ⭐ Beste Prijs-Kwaliteit
+                            </div>
+                          )}
+                          <ProductCard 
+                            {...product}
+                            onAddToComparison={onToggleComparison}
+                            isInComparison={comparisonSelection.includes(product.id)}
+                          />
+                        </div>
                       ))}
                     </div>
+
+                    {/* Andere opties */}
+                    {recommendedProducts.length > 2 && (
+                      <div className="bg-gray-50 p-6 rounded-lg">
+                        <h3 className="text-xl font-bold text-gray-900 mb-4">Andere opties</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                          {recommendedProducts.slice(2).map((product) => (
+                            <CompactProductCard 
+                              key={product.id}
+                              {...product}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
-                </motion.div>
-              );
-            })()}
+                </div>
+              </motion.div>
+            )}
             
             {/* Assistant Panel - Fixed 25% width on right */}
             <motion.div 
@@ -564,6 +578,10 @@ export function CategoryPage({
               <DigitalAssistant 
                 onClose={handleCloseAssistant} 
                 onRecommendProducts={(products) => setRecommendedProducts(products)}
+                onStartComparison={(products) => {
+                  setComparisonProducts(products);
+                  setShowComparison(true);
+                }}
                 externalQuery={assistantQuery}
                 onExternalQueryHandled={() => setAssistantQuery(null)}
                 externalRecommendation={assistantRecommendation}
@@ -611,29 +629,29 @@ export function CategoryPage({
         />
       )}
 
-      {/* Floating Comparison Button */}
+      {/* Floating comparison pill — appears when 2 products are selected */}
       <AnimatePresence>
-        {comparisonSelection.length === 2 && !showComparison && (
+        {comparisonSelection.length >= 2 && !isAssistantOpen && (
           <motion.div
-            initial={{ y: 100, opacity: 0 }}
+            initial={{ y: 80, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 100, opacity: 0 }}
-            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed bottom-8 left-1/2 transform -translate-x-1/2"
-            style={{ zIndex: 70 }}
+            exit={{ y: 80, opacity: 0 }}
+            transition={{ type: 'spring', damping: 28, stiffness: 380 }}
+            className="fixed bottom-8 left-1/2 -translate-x-1/2"
+            style={{ zIndex: 120 }}
           >
             <button
               onClick={handleLocalStartComparison}
-              className="bg-[#86a201] hover:bg-white hover:text-[#86a201] border-2 border-transparent hover:border-[#86a201] text-white px-8 py-4 rounded-[50px] shadow-2xl flex items-center gap-3 transition-colors"
+              className="flex items-center gap-3 bg-[#86a201] hover:bg-white border-2 border-[#86a201] text-white hover:text-[#86a201] px-8 py-3.5 rounded-[50px] shadow-xl transition-colors duration-200 whitespace-nowrap"
+              style={{ fontFamily: 'Open Sans, sans-serif', fontWeight: 600, fontSize: '16px' }}
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-              </svg>
-              <span className="text-lg font-semibold">Vergelijk {comparisonSelection.length} producten met HGS Buddy</span>
+              <BarChart2 className="w-5 h-5 flex-shrink-0" />
+              Vergelijk {comparisonSelection.length} producten met HGS Buddy
             </button>
           </motion.div>
         )}
       </AnimatePresence>
+
     </div>
   );
 }

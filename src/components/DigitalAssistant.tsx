@@ -1,6 +1,8 @@
 import image_a6f21462cc405079cdd2ae34aef56a46d8e35740 from "figma:asset/a6f21462cc405079cdd2ae34aef56a46d8e35740.png";
 import image_dce74fdb14eb802694d5bff3e866d069a5c57b2a from "figma:asset/dce74fdb14eb802694d5bff3e866d069a5c57b2a.png";
 import image_fc9da1e3760e10a2ff2466700605b512abd4db9c from "figma:asset/fc9da1e3760e10a2ff2466700605b512abd4db9c.png";
+import image_0172a0b6601455061ae3ab93872333e514c43067 from "figma:asset/0172a0b6601455061ae3ab93872333e514c43067.png";
+import image_4e06802bb42c52f11b8cd567671c285b86bd49ae from "figma:asset/4e06802bb42c52f11b8cd567671c285b86bd49ae.png";
 import {
   Send,
   X,
@@ -61,6 +63,7 @@ interface DigitalAssistantProps {
   onHoverFloatingButton?: (isHovering: boolean) => void;
   onRecommendProducts?: (products: any[]) => void;
   onCompareProducts?: (products: any[], context: any) => void;
+  onStartComparison?: (products: any[]) => void;
   externalQuery?: string | null;
   onExternalQueryHandled?: () => void;
   externalRecommendation?: any | null;
@@ -127,12 +130,52 @@ const mockProducts = [
   },
 ];
 
+const blenderProducts = [
+  {
+    id: 2,
+    name: 'Blendtec Stealth 885 | Blender | 200 smoothies per dag',
+    category: 'Keukenapparatuur',
+    price: '1.436,-',
+    oldPrice: '1.695,-',
+    inStock: true,
+    imageUrl: image_0172a0b6601455061ae3ab93872333e514c43067,
+    specs: {
+      'Capaciteit': '200 smoothies/dag',
+      'Vermogen': '3,8 kW (3 pk)',
+      'Geluidsniveau': '60 dB (Silent)',
+      "Automatische programma's": '42',
+      'Gewicht': '5,4 kg',
+      'Garantie': '3 jaar',
+      'Geluidskap': 'Ja (ingebouwd)',
+    },
+  },
+  {
+    id: 3,
+    name: 'Blendtec Connoisseur 825 | Blender | 150 Smoothies per dag',
+    category: 'Keukenapparatuur',
+    price: '1.227,-',
+    oldPrice: '1.443,-',
+    inStock: true,
+    imageUrl: image_4e06802bb42c52f11b8cd567671c285b86bd49ae,
+    specs: {
+      'Capaciteit': '150 smoothies/dag',
+      'Vermogen': '3,0 kW (2,4 pk)',
+      'Geluidsniveau': '65 dB',
+      "Automatische programma's": '20',
+      'Gewicht': '5,1 kg',
+      'Garantie': '3 jaar',
+      'Geluidskap': 'Optioneel (apart verkrijgbaar)',
+    },
+  },
+];
+
 export function DigitalAssistant({
   onClose,
   onOpen,
   onHoverFloatingButton,
   onRecommendProducts,
   onCompareProducts,
+  onStartComparison,
   externalQuery,
   onExternalQueryHandled,
   externalRecommendation,
@@ -546,15 +589,12 @@ export function DigitalAssistant({
       return [
         {
           id: Date.now(),
-          text: "Perfect! Ik help je graag met het vergelijken van producten.\n\nOm je de beste vergelijking te kunnen geven, heb ik wat informatie nodig:\n\n**Welke producten wil je vergelijken?**\n\n• Geef me de productnamen, modelnummers of artikelcodes\n• Of beschrijf het type apparatuur waar je naar kijkt (bijvoorbeeld: \"combisteamers\", \"koelkasten\", \"friteuses\")\n\nBijvoorbeeld:\n\"Vergelijk de Rational SelfCookingCenter met de Convotherm\"\n\"Ik wil verschillende pizza-ovens vergelijken\"\n\"Artikelnummer 12345 versus 67890\"\n\nZodra je me vertelt welke producten je wilt vergelijken, haal ik alle specificaties op en laat ik je de belangrijkste verschillen zien!",
+          text: "Welke categorie wil je vergelijken?",
           sender: "assistant",
           type: "text",
           suggestions: [
-            "Combisteamers",
-            "Koelkasten",
-            "Friteuses",
-            "Pizza-ovens",
-            "Ander product",
+            "Ovens",
+            "Keukenapparaten",
           ],
         },
       ];
@@ -930,6 +970,37 @@ export function DigitalAssistant({
 
     setMessages((prev) => [...prev, userMessage]);
 
+    // "Vergelijk deze opties" — direct blender comparison
+    if (question.toLowerCase().includes("vergelijk deze opties")) {
+      if (onStartComparison) {
+        onStartComparison(blenderProducts);
+      }
+      setIsThinking(true);
+      setTimeout(() => {
+        const responses = getBlenderComparison();
+        setMessages((prev) => [...prev, ...responses]);
+        setIsThinking(false);
+      }, 800);
+      return;
+    }
+
+    // "Vergelijk deze producten" — trigger comparison view with products from last suggestion
+    if (question.toLowerCase().includes("vergelijk deze producten")) {
+      const lastSuggestion = [...messages]
+        .reverse()
+        .find((m) => m.type === "product-suggestion");
+      if (lastSuggestion && onStartComparison) {
+        onStartComparison(lastSuggestion.data.products);
+      }
+      setIsThinking(true);
+      setTimeout(() => {
+        const responses = getComparison(mockProducts.slice(0, 2));
+        setMessages((prev) => [...prev, ...responses]);
+        setIsThinking(false);
+      }, 800);
+      return;
+    }
+
     // Check if this is part of the uitleg flow
     if (uitlegFlowActive) {
       setUitlegFlowActive(false);
@@ -1151,72 +1222,44 @@ export function DigitalAssistant({
   const handleComparisonFlow = (answer: string) => {
     setIsThinking(true);
     setTimeout(() => {
-      const { currentStep, searchQuery } = comparisonFlowState;
+      const lowerAnswer = answer.toLowerCase();
 
-      // Step 1: Category selected → show found products, ask which pair to compare
-      if (currentStep === 1) {
-        const lowerAnswer = answer.toLowerCase();
-        let categoryLabel = "combisteamers";
-        if (lowerAnswer.includes("koelkast")) categoryLabel = "koelkasten";
-        else if (lowerAnswer.includes("friteuse")) categoryLabel = "friteuses";
-        else if (lowerAnswer.includes("pizza")) categoryLabel = "pizza-ovens";
-        else if (lowerAnswer.includes("ander")) categoryLabel = "producten";
-
-        setComparisonFlowState((prev) => ({
-          ...prev,
-          currentStep: 2,
-          searchQuery: answer,
-        }));
-
-        const [p1, p2, p3] = mockProducts;
-        const foundMessage: Message = {
-          id: Date.now(),
-          text: `Ik heb 3 populaire ${categoryLabel} gevonden:\n\n**#1** ${p1.name} — ${p1.price}\n**#2** ${p2.name} — ${p2.price}\n**#3** ${p3.name} — ${p3.price}\n\nWelke twee wilt u met elkaar vergelijken?`,
-          sender: "assistant",
-          type: "text",
-          suggestions: [
-            `Vergelijk #1 en #2`,
-            `Vergelijk #1 en #3`,
-            `Vergelijk #2 en #3`,
-          ],
-        };
-
-        setMessages((prev) => [...prev, foundMessage]);
-        setIsThinking(false);
-        return;
-      }
-
-      // Step 2: Pair selected → trigger comparison view
-      if (currentStep === 2) {
-        let selectedProducts: typeof mockProducts = [];
-
-        if (answer.includes("#1") && answer.includes("#2")) {
-          selectedProducts = [mockProducts[0], mockProducts[1]];
-        } else if (answer.includes("#1") && answer.includes("#3")) {
-          selectedProducts = [mockProducts[0], mockProducts[2]];
-        } else if (answer.includes("#2") && answer.includes("#3")) {
-          selectedProducts = [mockProducts[1], mockProducts[2]];
-        } else {
-          selectedProducts = [mockProducts[0], mockProducts[1]];
-        }
-
+      // Step 1: Category selected → directly trigger comparison
+      if (lowerAnswer.includes("oven")) {
+        // Combisteamer comparison
+        const selectedProducts = [mockProducts[0], mockProducts[1]];
         const comparisonMessages = getComparison(selectedProducts);
         setMessages((prev) => [...prev, ...comparisonMessages]);
+        if (onStartComparison) onStartComparison(selectedProducts);
+        if (onCompareProducts) onCompareProducts(selectedProducts, {});
+      } else if (lowerAnswer.includes("keukenapparaat") || lowerAnswer.includes("keukenapparaten") || lowerAnswer.includes("blender")) {
+        // Blender comparison
+        const comparisonMessages = getBlenderComparison();
+        setMessages((prev) => [...prev, ...comparisonMessages]);
+        if (onStartComparison) onStartComparison(blenderProducts);
+        if (onCompareProducts) onCompareProducts(blenderProducts, {});
+      } else {
+        // Fallback — ask again
+        const fallbackMessage: Message = {
+          id: Date.now(),
+          text: "Kies een categorie om te vergelijken:",
+          sender: "assistant",
+          type: "text",
+          suggestions: ["Ovens", "Keukenapparaten"],
+        };
+        setMessages((prev) => [...prev, fallbackMessage]);
         setIsThinking(false);
-
-        if (onCompareProducts) {
-          onCompareProducts(selectedProducts, { searchQuery });
-        }
-
-        // Reset comparison flow
-        setComparisonFlowState({
-          isActive: false,
-          currentStep: 1,
-          products: [],
-          searchQuery: "",
-        });
         return;
       }
+
+      setIsThinking(false);
+      // Reset comparison flow
+      setComparisonFlowState({
+        isActive: false,
+        currentStep: 1,
+        products: [],
+        searchQuery: "",
+      });
     }, 800);
   };
 
@@ -1455,6 +1498,33 @@ export function DigitalAssistant({
           "Wat is de beste optie?",
           "Zijn er alternatieven?",
         ],
+      },
+    ];
+  };
+
+  const getBlenderComparison = (): Message[] => {
+    const [b1, b2] = blenderProducts;
+    const differences = [
+      { spec: "Capaciteit", product1: b1.specs['Capaciteit'], product2: b2.specs['Capaciteit'], winner: 1 },
+      { spec: "Vermogen", product1: b1.specs['Vermogen'], product2: b2.specs['Vermogen'], winner: 1 },
+      { spec: "Geluidsniveau", product1: b1.specs['Geluidsniveau'], product2: b2.specs['Geluidsniveau'], winner: 1 },
+      { spec: "Automatische programma's", product1: b1.specs["Automatische programma's"], product2: b2.specs["Automatische programma's"], winner: 1 },
+      { spec: "Geluidskap", product1: b1.specs['Geluidskap'], product2: b2.specs['Geluidskap'], winner: 1 },
+      { spec: "Prijs", product1: `€ ${b1.price}`, product2: `€ ${b2.price}`, winner: 2 },
+    ];
+    return [
+      {
+        id: Date.now(),
+        text: "Hier is de volledige vergelijking van de twee blenders:",
+        sender: "assistant",
+        type: "text",
+      },
+      {
+        id: Date.now() + 1,
+        sender: "assistant",
+        type: "comparison",
+        data: { products: blenderProducts, differences },
+        suggestions: ["Wat is de beste optie?", "Zijn er alternatieven?"],
       },
     ];
   };
