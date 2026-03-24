@@ -1,11 +1,11 @@
 
   # HGS BUDDY
 
-  This is a code bundle for HGS BUDDY. The original project is available at https://www.figma.com/design/MMaPt6w94ivc2B1rfuJPqM/HGS-BUDDY.
+ Dit is het prototype van mijn afstudeerproject. 
 
-  ## Running the code
+  Clone de repository 
+  
+  Run `npm i` om de packages te installeren.
 
-  Run `npm i` to install the dependencies.
-
-  Run `npm run dev` to start the development server.
+  Run `npm run dev` om het prototype te starten.
   
