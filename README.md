@@ -1,41 +1,91 @@
 # HGS Buddy
 
-HGS Buddy is een interactief webshop-prototype voor **Horeca Groothandel Specialist (HGS)**, ontwikkeld als afstudeerproject. Het prototype laat zien hoe een digitale AI-assistent bezoekers van een horeca-webshop kan helpen bij het zoeken, begrijpen en vergelijken van professionele keuken- en horeca-apparatuur.
+> Afstudeerproject Communicatie en Multimedia Design (CMD) — Hogeschool van Amsterdam
+> In opdracht van **BOLD Commerce**, voor de webshop **horecagrootkeukenshop.nl** (HGS).
 
-Het oorspronkelijke ontwerp is gemaakt in Figma en in code gezet met Vite, React en Tailwind CSS. De conversational AI wordt aangestuurd via een ingebedde **Voiceflow** chatbot.
+**HGS Buddy** is een digitale shopping assistent die gebruikers van horecagrootkeukenshop.nl begeleidt bij het zoeken, vergelijken en begrijpen van horeca-apparatuur. De buddy is op meerdere momenten in de customer journey aanwezig en helpt gebruikers sneller en met meer vertrouwen tot een aankoopbeslissing te komen in een assortiment van meer dan 30.000 artikelen.
+
+Dit prototype bestaat uit twee samenwerkende onderdelen:
+
+- een **visueel prototype** (deze repository) dat laat zien hoe de buddy op meerdere plekken in de webshop is geïntegreerd;
+- een **functioneel prototype** gebouwd in **Voiceflow v4**, gekoppeld aan een productdatabase in Google Sheets, dat de conversatielogica aandrijft.
 
 ---
 
 ## Inhoudsopgave
 
-- [Over het project](#over-het-project)
+- [Context](#context)
+- [Design Challenge](#design-challenge)
+- [Onderzoek in het kort](#onderzoek-in-het-kort)
+- [Design principes](#design-principes)
+- [Het eindproduct](#het-eindproduct)
 - [Versies](#versies)
-- [Belangrijkste features](#belangrijkste-features)
 - [Tech stack](#tech-stack)
 - [Projectstructuur](#projectstructuur)
 - [Installatie](#installatie)
-- [Scripts](#scripts)
+- [Voiceflow-prototype](#voiceflow-prototype)
 - [Deployment](#deployment)
-- [Ontwerp en assets](#ontwerp-en-assets)
-- [Testplan](#testplan)
+- [Validatie](#validatie)
+- [Student en begeleiding](#student-en-begeleiding)
 - [Licentie en attributies](#licentie-en-attributies)
 
 ---
 
-## Over het project
+## Context
 
-HGS Buddy simuleert een webshop met vier hoofdcategorieën (**Keuken**, **Café**, **Koelen**, **Accessoires**) en integreert een digitale assistent die:
+**BOLD Commerce** is een Amsterdams e-commerce bureau dat hoogwaardige Magento 2-, Shopify Plus- en headless-webshops bouwt. In februari 2023 heeft BOLD de webshop **horecagrootkeukenshop.nl** (HGS) overgenomen — een online groothandel in professionele horeca-apparatuur met meer dan **30.000 artikelen**, verdeeld over 7 menu-items, 72 categorieën en 323 subcategorieën.
 
-- productaanbevelingen geeft op basis van gebruikersvragen,
-- technische specificaties uitlegt in begrijpelijke taal,
-- producten met elkaar vergelijkt,
-- en gebruikers door een korte vragenlijst leidt om het juiste apparaat te vinden.
+Omdat klantenservice momenteel door één persoon wordt afgehandeld en veel gebruikers moeite hebben om in dat enorme aanbod het juiste product te vinden, vroeg BOLD om een oplossing die de gebruiker actief begeleidt zonder dat een volledige re-design of back-end aanpassing nodig is.
 
-Het doel is om te onderzoeken hoe conversational AI de zoek- en keuzeprocessen in een B2B-webshop voor de horeca kan verbeteren.
+## Design Challenge
+
+> **"Hoe kan een digitale assistent gebruikers van HGS op een gebruiksvriendelijke en betrouwbare manier ondersteunen bij het zoeken, vergelijken en informeren over producten en andere vragen?"**
+
+## Onderzoek in het kort
+
+De oplossing is gebouwd op vier onderzoekssporen:
+
+| Methode | Omvang | Wat het opleverde |
+|---|---|---|
+| **Usability test + Thinking Aloud** | 3 horecaprofessionals op de live webshop | Concrete knelpunten: te veel opties, onduidelijke filters, geen vergelijkmogelijkheid, specs zonder context |
+| **Online Analytics — klantenservice** | 175 HelpScout-tickets geanalyseerd | Terugkerende thema's: productspecificaties, alternatieven, advies op maat |
+| **Survey** | 47 respondenten | Vertrouwen is de belangrijkste voorwaarde om een AI-assistent te gebruiken |
+| **Stakeholder-analyse** | BOLD, HGS, klantenservice, developers, eindgebruikers | Belangen in kaart, gebruikt om ontwerpkeuzes te prioriteren |
+
+Aanvullend zijn benchmarks onderzocht (Coolblue Jeffrey, Amazon Rufus, ChatGPT Shopping) en Need-Based Profiles en Job Stories opgesteld.
+
+## Design principes
+
+Zes principes vormen het fundament van het ontwerp, onderbouwd door het onderzoek en verankerd in de **HAX Design Library voor Human-AI Interaction van Microsoft (2024)**:
+
+1. **Begeleid het keuzeproces stap voor stap** — de assistent stelt relevante vervolgvragen en biedt informatie gedoseerd aan.
+2. **Communiceer in natuurlijke en begrijpelijke taal** — geen vakjargon zonder uitleg.
+3. **Adviseer transparant en objectief** — aanbevelingen worden altijd toegelicht, alternatieven worden expliciet genoemd, geen commerciële sturing.
+4. **Maak verschillen tussen producten direct inzichtelijk** — vergelijken in één overzicht, focus op relevante verschillen.
+5. **Vertaal technische data naar betekenisvolle informatie** — specificaties krijgen context (bijv. kW vertaald naar kosten per uur).
+6. **Ondersteun verschillende kennisniveaus binnen één interface** — extra uitleg is optioneel, experts worden niet geblokkeerd.
+
+## Het eindproduct
+
+De HGS Buddy is op drie zichtbare plekken in de webshop geïntegreerd, plus twee contextuele touchpoints:
+
+- **Navigatiebalk** — vaste knop linksboven, altijd bereikbaar.
+- **Zoekbalk-dropdown** — "Vraag het aan HGS Buddy" als eerste suggestie bij het typen van een zoekopdracht.
+- **Floating button rechtsonder** — niet-opdringerig, altijd beschikbaar, met een "peeking"-animatie bij hover.
+- **Vergelijk-checkbox** op productkaarten in categoriepagina's — selecteer twee producten, open de vergelijking in de chat.
+- **Tekst-selectie popup** op productpagina's — selecteer een term (bijv. "Vermogen") en laat HGS Buddy de betekenis in context uitleggen.
+
+Binnen de chat kan de buddy:
+
+- de gebruiker via een **vraaggestuurde flow met quick replies** leiden naar een passend product,
+- producten **naast elkaar vergelijken** met voor- en nadelen en een situatiegerichte aanbeveling,
+- **technische specs uitleggen** in praktijktermen (bijv. energieverbruik omgezet naar kosten per dag/maand/jaar),
+- **alternatieven tonen** als een product niet past,
+- en **doorverwijzen naar de HGS-klantenservice** bij defecten, garantie of retourvragen.
 
 ## Versies
 
-Het project bestaat uit meerdere iteraties, elk op een eigen branch:
+Het prototype is in meerdere iteraties ontwikkeld. Elke iteratie staat op een eigen branch:
 
 | Branch  | Versie     | Omschrijving                                             |
 |---------|------------|----------------------------------------------------------|
@@ -44,17 +94,7 @@ Het project bestaat uit meerdere iteraties, elk op een eigen branch:
 | `v3`    | v3         | Figma-update met Voiceflow widget en toon/verberg toggle |
 | `final` | Eindversie | Definitieve versie met bijgewerkte Voiceflow widget (v4) |
 
-## Belangrijkste features
-
-- **Home-pagina** met hero, categoriekaarten en een uitklappende zoekbalk met populaire suggesties, categorieën en productresultaten.
-- **Categoriepagina** en **productpagina** met volledige productdetails.
-- **Digitale assistent (HGS Buddy)** als zij-paneel, aangestuurd door Voiceflow. Ondersteunt:
-  - vrije vragen,
-  - een gestuurde vragenlijst (type apparaat, capaciteit, gebruik, budget),
-  - productsuggesties, alternatieven en vergelijkingen.
-- **Vergelijkingsweergave** waarin twee producten naast elkaar worden gezet met uitleg bij specs.
-- **Spec-uitleg-tooltips** en een *text selection popup*: selecteer een term op de pagina en vraag de assistent om uitleg.
-- Volledig Nederlandstalige interface, passend bij het klantsegment.
+De `final`-branch bevat de versie die ter validatie is voorgelegd aan gebruikers, opdrachtgever en expert.
 
 ## Tech stack
 
@@ -68,7 +108,10 @@ Het project bestaat uit meerdere iteraties, elk op een eigen branch:
 | Animaties | [Framer Motion / motion](https://motion.dev/) |
 | Formulieren | [react-hook-form](https://react-hook-form.com/) |
 | Grafieken | [Recharts](https://recharts.org/) |
-| Conversational AI | [Voiceflow](https://www.voiceflow.com/) (widget geladen in `index.html`) |
+| Conversational AI | [Voiceflow](https://www.voiceflow.com/) v4 (widget geladen in `index.html`) |
+| Productdatabase (Voiceflow) | Google Sheets |
+
+**Branding:** huisstijlkleur `#86A201` (HGS-groen), met donkerder accent `#6B8201`. Typografie: Open Sans.
 
 ## Projectstructuur
 
@@ -88,19 +131,19 @@ HGS BUDDY/
     ├── imports/            # Uit Figma gegenereerde SVG-componenten
     ├── guidelines/         # Design guidelines
     └── components/
-        ├── WebshopHeader.tsx
-        ├── CategoryCard.tsx
-        ├── CategoryPage.tsx
+        ├── WebshopHeader.tsx         # Header met zoekbalk + HGS Buddy-knop
+        ├── CategoryCard.tsx          # Categorie-tegel op de homepagina
+        ├── CategoryPage.tsx          # Categoriepagina met vergelijk-checkbox
         ├── ProductCard.tsx
         ├── CompactProductCard.tsx
-        ├── ProductPage.tsx
-        ├── ComparisonView.tsx
-        ├── DigitalAssistant.tsx     # HGS Buddy zij-paneel
-        ├── SpecTooltip.tsx
-        ├── TextSelectionPopup.tsx
-        ├── specExplanationKeys.ts   # Mappings voor spec-uitleg
-        ├── figma/                   # Helpers (o.a. ImageWithFallback)
-        └── ui/                      # shadcn/ui componenten
+        ├── ProductPage.tsx           # Productpagina met spec-tooltips
+        ├── ComparisonView.tsx        # Vergelijkingstabel (2 producten)
+        ├── DigitalAssistant.tsx      # HGS Buddy zij-paneel
+        ├── SpecTooltip.tsx           # Tooltip-uitleg bij specificaties
+        ├── TextSelectionPopup.tsx    # Popup bij tekstselectie
+        ├── specExplanationKeys.ts    # Mappings voor spec-uitleg
+        ├── figma/                    # Helpers (o.a. ImageWithFallback)
+        └── ui/                       # shadcn/ui componenten
 ```
 
 ## Installatie
@@ -112,24 +155,31 @@ Vereisten: **Node.js 18+** en **npm**.
 git clone https://github.com/Liamvanbart1/hgs-buddy.git
 cd hgs-buddy
 
-# 2. Schakel naar de gewenste versie (bijv. de eindversie)
-git checkout final
+# 2. Schakel naar de eindversie
+git switch final
 
 # 3. Dependencies installeren
-npm install
+npm i
 
 # 4. Development server starten
 npm run dev
 ```
 
-De dev-server draait standaard op [http://localhost:3000](http://localhost:3000) en opent automatisch in je browser (zie `vite.config.ts`).
+De dev-server draait op [http://localhost:3000](http://localhost:3000) en opent automatisch in je browser.
 
-## Scripts
+## Voiceflow-prototype
 
-| Script | Beschrijving |
-|---|---|
-| `npm run dev` | Start de Vite dev-server met hot-reload. |
-| `npm run build` | Bouwt de productieversie naar de map `build/`. |
+Het conversationele deel van de HGS Buddy is gebouwd in **Voiceflow v4** en bestaat uit:
+
+- **Intentiedetectie** — herkent of de gebruiker een product zoekt, wil vergelijken, uitleg wil, alternatieven zoekt, of contact wil met klantenservice.
+- **Optionele ophelderingsstap** — als de intentie onduidelijk is, vraagt de buddy gericht door.
+- **Kern-agents** — afzonderlijke modules voor *zoeken & voorstellen*, *vergelijken*, *specificaties uitleggen* en *alternatieven tonen*. Agents kunnen naar elkaar terugverwijzen.
+- **Advieslaag** — levert een gepersonaliseerd advies op basis van situatie en specificaties.
+- **Klantenservice-routing** — nieuw in v4: actief bij defecten, garantie of retourvragen, verwijst de gebruiker netjes door.
+
+De Voiceflow widget wordt geladen in `index.html` (project-ID `69c1dabd8407c8436434a5fe`).
+
+Flow bekijken of bewerken: [Voiceflow project](https://creator.voiceflow.com/share/69c1dabd8407c8436434a5fe/development).
 
 ## Deployment
 
@@ -142,8 +192,6 @@ export default defineConfig({
 });
 ```
 
-Als je het project onder een andere URL wilt hosten, pas dan `base` aan (bijvoorbeeld naar `'/'` voor een root-deployment).
-
 Build en publiceer:
 
 ```bash
@@ -151,15 +199,25 @@ npm run build
 # Inhoud van build/ uploaden naar GitHub Pages of een andere statische host
 ```
 
-## Ontwerp en assets
+Host je onder een andere URL? Pas dan `base` aan (bijv. naar `'/'` voor root-hosting).
 
-- Het originele ontwerp staat in Figma: [HGS BUDDY op Figma](https://www.figma.com/design/MMaPt6w94ivc2B1rfuJPqM/HGS-BUDDY).
-- Figma-assets worden via aliassen (`figma:asset/...`) geresolved naar bestanden in `src/assets/` (zie `vite.config.ts`).
-- SVG-iconen uit het ontwerp zijn omgezet naar React-componenten in `src/imports/`.
+## Validatie
 
-## Testplan
+Het eindproduct is gevalideerd in drie rondes:
 
-Het testplan voor het prototype staat in `testplan_hgs_buddy.docx` in de projectroot. Hierin zijn de scenario's en acceptatiecriteria beschreven waarmee de werking van zowel de webshop als de digitale assistent gevalideerd wordt.
+- **Drie testrondes met gebruikers** — Thinking Aloud-methode, op basis waarvan het prototype driemaal iteratief is aangepast.
+- **Expert review** — Joske Sambros (UX-expert).
+- **Opdrachtgever-validatie** — Bart Pit (Co-Founder/CTO BOLD) en Mark (horeca, eerder usability-deelnemer) gaven akkoord; Mark gaf aan dat HGS Buddy duidelijker en overzichtelijker was dan de assistent van Coolblue.
+- **Technische validatie** — Niels van Oeffel (front-end developer bij BOLD) bevestigde dat het prototype klaar is voor implementatie.
+
+Het testplan staat in `testplan_hgs_buddy.docx` in de projectroot.
+
+## Student en begeleiding
+
+- **Student:** Liam van Bart (500857313) — [liam.van.bart@hva.nl](mailto:liam.van.bart@hva.nl)
+- **Opleiding:** Communicatie en Multimedia Design, afstudeerjaar — Hogeschool van Amsterdam
+- **Begeleider HvA:** Vincent Vijn
+- **Opdrachtgever:** Bart Pit, Co-Founder & CTO — [BOLD Commerce](https://boldcommerce.nl/)
 
 ## Licentie en attributies
 
@@ -167,3 +225,4 @@ Dit is een afstudeerproject en niet bedoeld voor productiegebruik. Zie `src/Attr
 
 - UI-componenten van [shadcn/ui](https://ui.shadcn.com/) onder [MIT-licentie](https://github.com/shadcn-ui/ui/blob/main/LICENSE.md).
 - Foto's van [Unsplash](https://unsplash.com) onder de [Unsplash License](https://unsplash.com/license).
+- Design principes geïnspireerd op de [HAX Design Library](https://www.microsoft.com/en-us/haxtoolkit/) van Microsoft (2024).
