@@ -2,6 +2,7 @@
 
 > Afstudeerproject Communicatie en Multimedia Design (CMD) — Hogeschool van Amsterdam
 > In opdracht van **BOLD Commerce**, voor de webshop **horecagrootkeukenshop.nl** (HGS).
+> **Afgerond met eindcijfer 7,5.**
 
 **HGS Buddy** is een digitale shopping assistent die gebruikers van horecagrootkeukenshop.nl begeleidt bij het zoeken, vergelijken en begrijpen van horeca-apparatuur. De buddy is op meerdere momenten in de customer journey aanwezig en helpt gebruikers sneller en met meer vertrouwen tot een aankoopbeslissing te komen in een assortiment van meer dan 30.000 artikelen.
 
@@ -211,6 +212,8 @@ Het eindproduct is gevalideerd in drie rondes:
 - **Technische validatie** — Niels van Oeffel (front-end developer bij BOLD) bevestigde dat het prototype klaar is voor implementatie.
 
 Het testplan staat in `testplan_hgs_buddy.docx` in de projectroot.
+
+Het afstudeerproject is uiteindelijk beoordeeld met een **eindcijfer van 7,5**.
 
 ## Student en begeleiding
 
